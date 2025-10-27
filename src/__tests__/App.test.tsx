@@ -254,4 +254,60 @@ describe("App", () => {
         ) as HTMLInputElement;
         expect(input2).toBeInTheDocument();
     });
+
+    test("should handle drag and drop file upload", () => {
+        render(<App />);
+
+        const dropArea = document.querySelector(".upload-area");
+        expect(dropArea).toBeInTheDocument();
+
+        // Test that drag over event handler exists
+        const dragOverEvent = new Event("dragover", { bubbles: true });
+        const preventDefaultSpy = jest.fn();
+        Object.defineProperty(dragOverEvent, "preventDefault", {
+            value: preventDefaultSpy,
+        });
+
+        dropArea?.dispatchEvent(dragOverEvent);
+        expect(preventDefaultSpy).toHaveBeenCalled();
+    });
+
+    test("should disable input while loading", async () => {
+        const user = userEvent.setup();
+        mockParse.mockImplementation(
+            () =>
+                new Promise((resolve) =>
+                    setTimeout(() => resolve(mockFitData), 500)
+                )
+        );
+
+        render(<App />);
+
+        const file = new File(["content"], "test.fit", {
+            type: "application/octet-stream",
+        });
+        const input = document.querySelector(
+            'input[type="file"]'
+        ) as HTMLInputElement;
+
+        await user.upload(input, file);
+
+        // Check that input is disabled while loading
+        await waitFor(() => {
+            const disabledInput = document.querySelector(
+                'input[type="file"][disabled]'
+            );
+            expect(disabledInput).toBeInTheDocument();
+        });
+
+        // Wait for loading to finish
+        await waitFor(
+            () => {
+                expect(
+                    screen.queryByText(/parsing file/i)
+                ).not.toBeInTheDocument();
+            },
+            { timeout: 3000 }
+        );
+    });
 });
