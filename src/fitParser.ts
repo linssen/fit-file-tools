@@ -1,13 +1,13 @@
 import FitParser from "fit-file-parser";
 
 interface FitDataRaw {
-    sessions?: any[];
-    records?: any[];
-    activities?: any[];
-    devices?: any[];
+    sessions?: unknown[];
+    records?: unknown[];
+    activities?: unknown[];
+    devices?: unknown[];
 }
 
-interface ActivitySummary {
+export interface ActivitySummary {
     sport?: string;
     totalElapsedTime?: string | null;
     totalDistance?: string | null;
@@ -20,19 +20,19 @@ interface ActivitySummary {
     message?: string;
 }
 
-interface GpsPoint {
+export interface GpsPoint {
     lat: number;
     lng: number;
     elevation: number | null;
     timestamp: Date | null;
 }
 
-interface HeartRateData {
+export interface HeartRateData {
     heartRate: number;
     timestamp: Date | null;
 }
 
-interface DeviceInfo {
+export interface DeviceInfo {
     manufacturer?: string;
     product?: string;
     serialNumber?: number | null;
@@ -41,7 +41,7 @@ interface DeviceInfo {
     message?: string;
 }
 
-interface OrganizedData {
+export interface OrganizedData {
     summary: ActivitySummary;
     gpsData: GpsPoint[];
     heartRateData: HeartRateData[];
@@ -54,7 +54,7 @@ interface OrganizedData {
     };
 }
 
-interface ParsedFitData extends OrganizedData {
+export interface ParsedFitData extends OrganizedData {
     success: boolean;
     fileSize: number;
 }
@@ -64,7 +64,7 @@ interface ParsedFitData extends OrganizedData {
  * Handles parsing of Garmin FIT files
  */
 class FitFileParser {
-    private parser: any;
+    private parser: FitParser;
 
     constructor() {
         this.parser = new FitParser();
@@ -89,8 +89,10 @@ class FitFileParser {
                 fileSize: buffer.byteLength,
                 ...organized,
             };
-        } catch (error: any) {
-            throw new Error(`Failed to parse FIT file: ${error.message}`);
+        } catch (error: unknown) {
+            const errorMessage =
+                error instanceof Error ? error.message : String(error);
+            throw new Error(`Failed to parse FIT file: ${errorMessage}`);
         }
     }
 
@@ -118,11 +120,15 @@ class FitFileParser {
      * Extract activity summary information
      */
     extractSummary(
-        sessions: any[] = [],
-        activities: any[] = []
+        sessions: unknown[] = [],
+        activities: unknown[] = []
     ): ActivitySummary {
-        const session = sessions[0];
-        const activity = activities[0];
+        const session = sessions[0] as
+            | Record<string, string | number | undefined>
+            | undefined;
+        const activity = activities[0] as
+            | Record<string, string | number | undefined>
+            | undefined;
 
         if (!session && !activity) {
             return { message: "No session or activity data found" };
@@ -131,25 +137,41 @@ class FitFileParser {
         const summary: ActivitySummary = {};
 
         if (session) {
-            summary.sport = session.sport || "Unknown";
-            summary.totalElapsedTime = session.total_elapsed_time
-                ? this.formatDuration(session.total_elapsed_time)
-                : null;
-            summary.totalDistance = session.total_distance
-                ? `${(session.total_distance / 1000).toFixed(2)} km`
-                : null;
-            summary.avgSpeed = session.avg_speed
-                ? `${(session.avg_speed * 3.6).toFixed(1)} km/h`
-                : null;
-            summary.maxSpeed = session.max_speed
-                ? `${(session.max_speed * 3.6).toFixed(1)} km/h`
-                : null;
-            summary.totalCalories = session.total_calories || null;
-            summary.avgHeartRate = session.avg_heart_rate || null;
-            summary.maxHeartRate = session.max_heart_rate || null;
-            summary.startTime = session.start_time
-                ? new Date(session.start_time).toLocaleString()
-                : null;
+            summary.sport =
+                typeof session.sport === "string" ? session.sport : "Unknown";
+            summary.totalElapsedTime =
+                typeof session.total_elapsed_time === "number"
+                    ? this.formatDuration(session.total_elapsed_time)
+                    : null;
+            summary.totalDistance =
+                typeof session.total_distance === "number"
+                    ? `${(session.total_distance / 1000).toFixed(2)} km`
+                    : null;
+            summary.avgSpeed =
+                typeof session.avg_speed === "number"
+                    ? `${(session.avg_speed * 3.6).toFixed(1)} km/h`
+                    : null;
+            summary.maxSpeed =
+                typeof session.max_speed === "number"
+                    ? `${(session.max_speed * 3.6).toFixed(1)} km/h`
+                    : null;
+            summary.totalCalories =
+                typeof session.total_calories === "number"
+                    ? session.total_calories
+                    : null;
+            summary.avgHeartRate =
+                typeof session.avg_heart_rate === "number"
+                    ? session.avg_heart_rate
+                    : null;
+            summary.maxHeartRate =
+                typeof session.max_heart_rate === "number"
+                    ? session.max_heart_rate
+                    : null;
+            summary.startTime =
+                typeof session.start_time === "string" ||
+                typeof session.start_time === "number"
+                    ? new Date(session.start_time).toLocaleString()
+                    : null;
         }
 
         return summary;
@@ -158,42 +180,85 @@ class FitFileParser {
     /**
      * Extract GPS track data
      */
-    extractGpsData(records: any[] = []): GpsPoint[] {
+    extractGpsData(records: unknown[] = []): GpsPoint[] {
         return records
-            .filter((record) => record.position_lat && record.position_long)
+            .filter(
+                (record): record is Record<string, unknown> =>
+                    typeof record === "object" &&
+                    record !== null &&
+                    "position_lat" in record &&
+                    "position_long" in record
+            )
             .map((record) => ({
-                lat: this.convertSemicirclesToDegrees(record.position_lat),
-                lng: this.convertSemicirclesToDegrees(record.position_long),
-                elevation: record.altitude || null,
-                timestamp: record.timestamp ? new Date(record.timestamp) : null,
+                lat: this.convertSemicirclesToDegrees(
+                    record.position_lat as number
+                ),
+                lng: this.convertSemicirclesToDegrees(
+                    record.position_long as number
+                ),
+                elevation:
+                    typeof record.altitude === "number"
+                        ? record.altitude
+                        : null,
+                timestamp:
+                    record.timestamp instanceof Date ||
+                    typeof record.timestamp === "string" ||
+                    typeof record.timestamp === "number"
+                        ? new Date(record.timestamp)
+                        : null,
             }));
     }
 
     /**
      * Extract heart rate data
      */
-    extractHeartRateData(records: any[] = []): HeartRateData[] {
+    extractHeartRateData(records: unknown[] = []): HeartRateData[] {
         return records
-            .filter((record) => record.heart_rate)
+            .filter(
+                (record): record is Record<string, unknown> =>
+                    typeof record === "object" &&
+                    record !== null &&
+                    "heart_rate" in record
+            )
             .map((record) => ({
-                heartRate: record.heart_rate,
-                timestamp: record.timestamp ? new Date(record.timestamp) : null,
+                heartRate: record.heart_rate as number,
+                timestamp:
+                    record.timestamp instanceof Date ||
+                    typeof record.timestamp === "string" ||
+                    typeof record.timestamp === "number"
+                        ? new Date(record.timestamp)
+                        : null,
             }));
     }
 
     /**
      * Extract device information
      */
-    extractDeviceInfo(devices: any[] = []): DeviceInfo {
-        const device = devices[0];
+    extractDeviceInfo(devices: unknown[] = []): DeviceInfo {
+        const device = devices[0] as
+            | Record<string, string | number | undefined>
+            | undefined;
         if (!device) return { message: "No device information found" };
 
         return {
-            manufacturer: device.manufacturer || "Unknown",
-            product: device.product || "Unknown",
-            serialNumber: device.serial_number || null,
-            softwareVersion: device.software_version || null,
-            hardwareVersion: device.hardware_version || null,
+            manufacturer:
+                typeof device.manufacturer === "string"
+                    ? device.manufacturer
+                    : "Unknown",
+            product:
+                typeof device.product === "string" ? device.product : "Unknown",
+            serialNumber:
+                typeof device.serial_number === "number"
+                    ? device.serial_number
+                    : null,
+            softwareVersion:
+                typeof device.software_version === "number"
+                    ? device.software_version
+                    : null,
+            hardwareVersion:
+                typeof device.hardware_version === "number"
+                    ? device.hardware_version
+                    : null,
         };
     }
 

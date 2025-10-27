@@ -1,19 +1,4 @@
-import FitFileParser from "./fitParser";
-
-interface ParsedFitData {
-    success: boolean;
-    fileSize: number;
-    summary: any;
-    gpsData: any[];
-    heartRateData: any[];
-    deviceInfo: any;
-    rawData: {
-        sessions: number;
-        records: number;
-        activities: number;
-        devices: number;
-    };
-}
+import FitFileParser, { type ParsedFitData } from "./fitParser";
 
 /**
  * Main application logic
@@ -96,8 +81,10 @@ class FitFileApp {
 
             // Display results
             this.displayResults(file, fitData);
-        } catch (error: any) {
-            this.showError(`Error processing file: ${error.message}`);
+        } catch (error: unknown) {
+            const errorMessage =
+                error instanceof Error ? error.message : String(error);
+            this.showError(`Error processing file: ${errorMessage}`);
         }
     }
 
