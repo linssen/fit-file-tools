@@ -1,2 +1,5 @@
+# Lint and format staged files
 yarn lint-staged
+
+# Run all tests
 yarn test

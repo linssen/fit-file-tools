@@ -7,9 +7,10 @@ This project uses [Husky](https://typicode.github.io/husky/) to manage Git hooks
 The pre-commit hook automatically runs before each commit to ensure code quality:
 
 ### What it does:
-1. **Lint-staged**: Automatically formats and lints staged files
-   - Runs ESLint with auto-fix on TypeScript files
-   - Runs Prettier on all staged files (TS, TSX, CSS, HTML)
+1. **Lint-staged**: Automatically lints and formats staged files
+   - Runs ESLint with auto-fix on TypeScript files (catches code issues)
+   - Runs Prettier on all staged files (formats code style)
+   - Only processes staged files for speed
    
 2. **Tests**: Runs the full test suite (62 tests)
    - Ensures all tests pass before committing
@@ -21,11 +22,11 @@ The pre-commit hook automatically runs before each commit to ensure code quality
 ```json
 "lint-staged": {
   "src/**/*.{ts,tsx}": [
-    "eslint --fix",
-    "prettier --write"
+    "eslint --fix",      // Fix linting issues
+    "prettier --write"   // Format code
   ],
   "src/**/*.{css,html}": [
-    "prettier --write"
+    "prettier --write"   // Format styles and HTML
   ]
 }
 ```
