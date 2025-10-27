@@ -94,7 +94,10 @@ export class FitFileEncoder {
         }
 
         // Clone the message to avoid modifying the original
-        const modifiedMessage = { ...(message as Record<string, unknown>) };
+        // Use a proper deep clone for complex objects including Dates
+        const modifiedMessage = this.cloneMessage(
+            message as Record<string, unknown>
+        );
 
         // Apply modifications based on message type
         if (mesgType === "deviceInfoMesgs" && modifications.device) {
@@ -104,15 +107,48 @@ export class FitFileEncoder {
             );
         }
 
-        // Write the message using onMesg
+        // Write the message using writeMesg with mesgNum property
+        // This is the preferred method for the @garmin/fitsdk Encoder
         try {
-            encoder.onMesg(mesgNum, modifiedMessage);
+            encoder.writeMesg({
+                mesgNum,
+                ...modifiedMessage,
+            });
         } catch (error) {
             console.error(`Error encoding message type ${mesgType}:`, error);
             throw new Error(
                 `Failed to encode ${mesgType}: ${error instanceof Error ? error.message : String(error)}`
             );
         }
+    }
+
+    /**
+     * Clone a message object properly, preserving Date objects and other types
+     */
+    private cloneMessage(
+        message: Record<string, unknown>
+    ): Record<string, unknown> {
+        const cloned: Record<string, unknown> = {};
+
+        for (const [key, value] of Object.entries(message)) {
+            if (value instanceof Date) {
+                // Preserve Date objects
+                cloned[key] = new Date(value);
+            } else if (value === null || value === undefined) {
+                // Preserve null/undefined
+                cloned[key] = value;
+            } else if (typeof value === "object" && !Array.isArray(value)) {
+                // Deep clone nested objects (rare in FIT messages)
+                cloned[key] = this.cloneMessage(
+                    value as Record<string, unknown>
+                );
+            } else {
+                // Primitives and arrays
+                cloned[key] = value;
+            }
+        }
+
+        return cloned;
     }
 
     /**

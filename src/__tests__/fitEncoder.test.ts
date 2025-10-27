@@ -8,7 +8,20 @@ import FitFileEncoder, { type FieldModifications } from "../fitEncoder";
 import { Encoder } from "@garmin/fitsdk";
 
 // Mock the @garmin/fitsdk module
-jest.mock("@garmin/fitsdk");
+jest.mock("@garmin/fitsdk", () => ({
+    Encoder: jest.fn(),
+    Profile: {
+        MesgNum: {
+            FILE_ID: 0,
+            DEVICE_INFO: 23,
+            SESSION: 18,
+            LAP: 19,
+            RECORD: 20,
+            EVENT: 21,
+            ACTIVITY: 34,
+        },
+    },
+}));
 
 const MockedEncoder = Encoder as jest.MockedClass<typeof Encoder>;
 
@@ -23,7 +36,7 @@ describe("FitFileEncoder", () => {
     describe("encodeWithModifications", () => {
         it("should encode FIT file with device modifications", () => {
             const mockEncoder = {
-                onMesg: jest.fn(),
+                writeMesg: jest.fn(),
                 close: jest.fn(() => new Uint8Array([1, 2, 3, 4])),
             };
 
@@ -74,7 +87,7 @@ describe("FitFileEncoder", () => {
 
         it("should handle encoding errors gracefully", () => {
             const mockEncoder = {
-                onMesg: jest.fn(),
+                writeMesg: jest.fn(),
                 close: jest.fn(() => {
                     throw new Error("Encoding failed");
                 }),
@@ -93,7 +106,7 @@ describe("FitFileEncoder", () => {
 
         it("should handle empty message arrays", () => {
             const mockEncoder = {
-                onMesg: jest.fn(),
+                writeMesg: jest.fn(),
                 close: jest.fn(() => new Uint8Array()),
             };
 
@@ -112,7 +125,7 @@ describe("FitFileEncoder", () => {
 
         it("should apply device modifications to deviceInfo messages", () => {
             const mockEncoder = {
-                onMesg: jest.fn(),
+                writeMesg: jest.fn(),
                 close: jest.fn(() => new Uint8Array()),
             };
 
@@ -148,7 +161,7 @@ describe("FitFileEncoder", () => {
 
         it("should apply only specified device modifications", () => {
             const mockEncoder = {
-                onMesg: jest.fn(),
+                writeMesg: jest.fn(),
                 close: jest.fn(() => new Uint8Array()),
             };
 
@@ -182,7 +195,7 @@ describe("FitFileEncoder", () => {
 
         it("should handle messages that are not in messageOrder", () => {
             const mockEncoder = {
-                onMesg: jest.fn(),
+                writeMesg: jest.fn(),
                 close: jest.fn(() => new Uint8Array()),
             };
 
