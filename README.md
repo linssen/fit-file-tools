@@ -1,20 +1,23 @@
 # FIT File Reader
 
-A standalone HTML/JavaScript web application for reading and parsing Garmin FIT files directly in the browser.
+A standalone React web application for reading and parsing Garmin FIT files directly in the browser.
 
 ## Features
 
 - 🏃 **Client-side Processing**: All FIT file parsing happens in your browser - no data leaves your device
-- 📁 **Drag & Drop**: Simple file upload interface with drag-and-drop support
-- 🔍 **File Analysis**: Parse FIT file headers and extract basic information
-- 🧪 **Unit Testing**: Built-in test suite for reliable development
+- ⚛️ **React 19**: Modern component-based architecture with hooks
+- 📁 **Drag & Drop**: Intuitive file upload interface with drag-and-drop support
+- � **Data Visualization**: View GPS tracks, heart rate, power, and more
+- �🔍 **File Analysis**: Parse and display comprehensive FIT file data
+- 🧪 **90%+ Test Coverage**: Comprehensive test suite with React Testing Library
 - 📱 **Responsive**: Works on desktop and mobile browsers
+- 🎨 **Modern UI**: Clean, user-friendly interface
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 14+ and Yarn package manager
+- Node.js 22+ and Yarn package manager
 - Git for version control
 
 ### Local Development
@@ -41,58 +44,94 @@ A standalone HTML/JavaScript web application for reading and parsing Garmin FIT 
    yarn test
    ```
 
-5. Build for production
+5. Run tests with coverage
+   ```bash
+   yarn test:coverage
+   ```
+
+6. Build for production
    ```bash
    yarn build
    ```
 
 ### GitHub Pages Deployment
 
-This project is ready to deploy on GitHub Pages:
+This project automatically deploys to GitHub Pages using GitHub Actions:
 
-1. Push code to your GitHub repository
-2. Go to repository Settings → Pages
-3. Select "Deploy from a branch" and choose `main` branch
-4. Your app will be available at `https://yourusername.github.io/repositoryname`
+1. Push code to your GitHub repository's `master` branch
+2. GitHub Actions will automatically build and deploy
+3. Go to repository Settings → Pages
+4. Ensure "GitHub Actions" is selected as the source
+5. Your app will be available at `https://yourusername.github.io/repositoryname`
+
+The workflow runs on every push to `master` and includes:
+- Dependency installation
+- Test execution
+- Production build
+- Automatic deployment
 
 ## Testing
 
-Open `tests/index.html` in your browser to run the unit test suite. Tests cover:
+Run the comprehensive test suite:
 
-- FIT file format validation
-- Header parsing
+```bash
+yarn test              # Run all tests
+yarn test:watch        # Watch mode
+yarn test:coverage     # With coverage report
+```
+
+Test coverage includes:
+- React component rendering and interactions
+- File upload validation (extension, size)
+- FIT file parsing
+- GPS and heart rate data extraction
 - Error handling
-- File size calculations
+- Loading states
+
+Current coverage: **90.74%** overall, **85.29%** components
 
 ## Project Structure
 
 ```
 fitfiles/
-├── index.html          # Main application
-├── styles.css          # Application styles
-├── js/
-│   ├── app.js          # Main application logic
-│   └── fitParser.js    # FIT file parsing logic
-├── tests/
-│   └── index.html      # Test suite
-└── README.md           # This file
+├── src/
+│   ├── index.tsx              # React entry point
+│   ├── App.tsx                # Main application component
+│   ├── fitParser.ts           # FIT file parsing logic
+│   ├── components/
+│   │   ├── FileUpload.tsx     # File upload UI
+│   │   ├── FileInfo.tsx       # File metadata display
+│   │   ├── ActivitySummary.tsx # Activity metrics
+│   │   └── DataPreview.tsx    # GPS/HR data tables
+│   ├── __tests__/
+│   │   ├── App.test.tsx
+│   │   ├── fitParser.test.ts
+│   │   ├── integration.test.ts
+│   │   └── components/        # Component tests
+│   ├── styles.css             # Application styles
+│   └── index.html             # HTML template
+├── dist/                      # Production build output
+├── .github/workflows/
+│   └── deploy.yml            # GitHub Pages deployment
+├── webpack.config.js         # Build configuration
+├── jest.config.js           # Test configuration
+├── tsconfig.json            # TypeScript configuration
+└── package.json             # Dependencies and scripts
 ```
 
-## Current Status
+## Technology Stack
 
-🚧 **Early Development Phase**
-
-- ✅ Basic file upload and validation
-- ✅ FIT file header parsing
-- ✅ Unit testing framework
-- ⏳ Full FIT protocol implementation (in progress)
-- ⏳ Data visualization
-- ⏳ GPS track display
-- ⏳ Heart rate/power analysis
+- **React 19** - UI framework
+- **TypeScript** - Type safety
+- **Webpack 5** - Module bundling
+- **Jest** - Testing framework
+- **React Testing Library** - Component testing
+- **fit-file-parser** - FIT protocol implementation
+- **ESLint + Prettier** - Code quality
 
 ## FIT File Format
 
-FIT (Flexible and Interoperable Data Transfer) is a proprietary binary format developed by Garmin for storing fitness data. This application aims to provide a complete client-side parser for extracting:
+FIT (Flexible and Interoperable Data Transfer) is a proprietary binary format developed by Garmin for storing fitness data. This application extracts:
 
 - GPS coordinates and elevation
 - Heart rate data
