@@ -19,7 +19,9 @@ module.exports = {
     transform: {
         "^.+\\.(ts|tsx|js|jsx)$": "babel-jest",
     },
-    transformIgnorePatterns: ["node_modules/(?!(fit-file-parser|buffer)/)"],
+    transformIgnorePatterns: [
+        "node_modules/(?!(fit-file-parser|buffer|@garmin)/)",
+    ],
     moduleNameMapper: {
         "\\.(css|less|scss|sass)$": "identity-obj-proxy",
     },

@@ -2,6 +2,28 @@
 import "jest-environment-jsdom";
 import "@testing-library/jest-dom";
 
+// Mock @garmin/fitsdk
+jest.mock("@garmin/fitsdk", () => ({
+    Decoder: jest.fn(),
+    Stream: {
+        fromArrayBuffer: jest.fn(),
+        fromBuffer: jest.fn(),
+        fromByteArray: jest.fn(),
+    },
+    Encoder: jest.fn(),
+    Profile: {
+        MesgNum: {},
+        types: {
+            mesgNum: {},
+        },
+    },
+    Utils: {
+        FIT_EPOCH_MS: 631065600000,
+        convertDateTimeToDate: (fitDateTime: number) =>
+            new Date(fitDateTime * 1000 + 631065600000),
+    },
+}));
+
 // Mock File API for testing
 global.FileReader = class {
     result: ArrayBuffer | null = null;

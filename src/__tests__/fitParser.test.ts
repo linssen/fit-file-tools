@@ -1,20 +1,45 @@
 import FitFileParser from "../fitParser";
+import { Decoder, Stream } from "@garmin/fitsdk";
+
+// Mock @garmin/fitsdk
+jest.mock("@garmin/fitsdk");
 
 describe("FitFileParser", () => {
     let parser: FitFileParser;
+    let mockDecoder: jest.Mocked<Decoder>;
+    let mockStream: jest.Mocked<Stream>;
 
     beforeEach(() => {
         parser = new FitFileParser();
+
+        // Setup mocks
+        mockStream = {} as jest.Mocked<Stream>;
+        (Stream.fromArrayBuffer as jest.Mock) = jest
+            .fn()
+            .mockReturnValue(mockStream);
+        (Decoder.isFIT as jest.Mock) = jest.fn().mockReturnValue(true);
+
+        mockDecoder = {
+            read: jest.fn().mockReturnValue({
+                messages: {
+                    sessionMesgs: [],
+                    recordMesgs: [],
+                    activityMesgs: [],
+                    deviceInfoMesgs: [],
+                },
+                errors: [],
+            }),
+        } as unknown as jest.Mocked<Decoder>;
+
+        (Decoder as unknown as jest.Mock).mockImplementation(() => mockDecoder);
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
     });
 
     test("should instantiate correctly", () => {
         expect(parser).toBeInstanceOf(FitFileParser);
-    });
-
-    test("should convert semicircles to degrees correctly", () => {
-        const semicircles = 1073741824; // 90 degrees in semicircles
-        const degrees = parser.convertSemicirclesToDegrees(semicircles);
-        expect(degrees).toBeCloseTo(90, 5);
     });
 
     test("should format duration correctly", () => {
@@ -26,14 +51,14 @@ describe("FitFileParser", () => {
     test("should organize GPS data correctly", () => {
         const mockRecords = [
             {
-                position_lat: 536870912, // ~45 degrees
-                position_long: 536870912, // ~45 degrees
+                positionLat: 45.0,
+                positionLong: -122.0,
                 altitude: 100,
                 timestamp: new Date("2023-01-01T10:00:00Z"),
             },
             {
-                position_lat: 537919488, // ~45.1 degrees
-                position_long: 537919488, // ~45.1 degrees
+                positionLat: 45.1,
+                positionLong: -122.1,
                 altitude: 105,
                 timestamp: new Date("2023-01-01T10:01:00Z"),
             },
@@ -43,8 +68,8 @@ describe("FitFileParser", () => {
 
         expect(gpsData).toHaveLength(2);
         expect(gpsData[0]).toMatchObject({
-            lat: expect.any(Number),
-            lng: expect.any(Number),
+            lat: 45.0,
+            lng: -122.0,
             elevation: 100,
             timestamp: expect.any(Date),
         });
@@ -53,11 +78,11 @@ describe("FitFileParser", () => {
     test("should extract heart rate data correctly", () => {
         const mockRecords = [
             {
-                heart_rate: 150,
+                heartRate: 150,
                 timestamp: new Date("2023-01-01T10:00:00Z"),
             },
             {
-                heart_rate: 155,
+                heartRate: 155,
                 timestamp: new Date("2023-01-01T10:01:00Z"),
             },
             {
@@ -93,9 +118,9 @@ describe("FitFileParser", () => {
             {
                 manufacturer: "Garmin",
                 product: "Edge 530",
-                serial_number: 123456789,
-                software_version: 12.0,
-                hardware_version: 1.0,
+                serialNumber: 123456789,
+                softwareVersion: 12.0,
+                hardwareVersion: 1.0,
             },
         ];
 

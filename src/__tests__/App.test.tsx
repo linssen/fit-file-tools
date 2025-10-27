@@ -5,64 +5,72 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "../App";
-import FitFileParser from "../fitParser";
+import { Decoder, Stream } from "@garmin/fitsdk";
 
-// Mock the FitFileParser
-jest.mock("../fitParser");
-
-const mockFitData = {
-    success: true,
-    fileSize: 1024,
-    summary: {
-        sport: "cycling",
-        startTime: "2023-01-01 10:00:00",
-        totalElapsedTime: "1:30:00",
-        totalDistance: "10.5 km",
-        avgSpeed: "25.3 km/h",
-        maxSpeed: "45.2 km/h",
-        totalCalories: 650,
-        avgHeartRate: 155,
-        maxHeartRate: 185,
-    },
-    gpsData: [
-        {
-            lat: 45.0,
-            lng: -122.0,
-            elevation: 100,
-            timestamp: new Date("2023-01-01T10:00:00"),
-        },
-        {
-            lat: 45.1,
-            lng: -122.1,
-            elevation: 105,
-            timestamp: new Date("2023-01-01T10:01:00"),
-        },
-    ],
-    heartRateData: [
-        { heartRate: 150, timestamp: new Date("2023-01-01T10:00:00") },
-        { heartRate: 155, timestamp: new Date("2023-01-01T10:01:00") },
-    ],
-    deviceInfo: {
-        manufacturer: "Garmin",
-        product: "Edge 530",
-    },
-    rawData: {
-        records: 100,
-        sessions: 1,
-        activities: 1,
-        devices: 1,
-    },
-};
+// Mock @garmin/fitsdk
+jest.mock("@garmin/fitsdk");
 
 describe("App", () => {
-    let mockParse: jest.Mock;
     let mockAlert: jest.SpyInstance;
+    let mockStream: unknown;
+    let mockDecoder: {
+        read: jest.Mock;
+    };
 
     beforeEach(() => {
-        mockParse = jest.fn().mockResolvedValue(mockFitData);
-        (FitFileParser as jest.Mock).mockImplementation(() => ({
-            parse: mockParse,
-        }));
+        // Setup mocks
+        mockStream = {};
+        (Stream.fromArrayBuffer as jest.Mock) = jest
+            .fn()
+            .mockReturnValue(mockStream);
+        (Decoder.isFIT as jest.Mock) = jest.fn().mockReturnValue(true);
+
+        mockDecoder = {
+            read: jest.fn().mockReturnValue({
+                messages: {
+                    sessionMesgs: [
+                        {
+                            sport: "cycling",
+                            startTime: new Date("2023-01-01T10:00:00"),
+                            totalElapsedTime: 5400, // 1:30:00
+                            totalDistance: 10500, // 10.5 km
+                            avgSpeed: 7.027777, // 25.3 km/h in m/s
+                            maxSpeed: 12.555555, // 45.2 km/h in m/s
+                            totalCalories: 650,
+                            avgHeartRate: 155,
+                            maxHeartRate: 185,
+                        },
+                    ],
+                    recordMesgs: [
+                        {
+                            positionLat: 45.0,
+                            positionLong: -122.0,
+                            altitude: 100,
+                            timestamp: new Date("2023-01-01T10:00:00"),
+                            heartRate: 150,
+                        },
+                        {
+                            positionLat: 45.1,
+                            positionLong: -122.1,
+                            altitude: 105,
+                            timestamp: new Date("2023-01-01T10:01:00"),
+                            heartRate: 155,
+                        },
+                    ],
+                    activityMesgs: [],
+                    deviceInfoMesgs: [
+                        {
+                            manufacturer: "Garmin",
+                            product: "Edge 530",
+                        },
+                    ],
+                },
+                errors: [],
+            }),
+        };
+
+        (Decoder as unknown as jest.Mock).mockImplementation(() => mockDecoder);
+
         mockAlert = jest.spyOn(window, "alert").mockImplementation(() => {});
     });
 
@@ -154,7 +162,7 @@ describe("App", () => {
 
         // Check activity summary is displayed
         expect(screen.getByText("Activity Summary")).toBeInTheDocument();
-        expect(screen.getAllByText("10.5 km")[0]).toBeInTheDocument();
+        expect(screen.getAllByText("10.50 km")[0]).toBeInTheDocument();
         expect(screen.getByText("25.3 km/h")).toBeInTheDocument();
 
         // Check data preview is displayed
@@ -169,11 +177,61 @@ describe("App", () => {
     });
 
     test("should show loading state while parsing", async () => {
-        // Mock a slow parse
-        mockParse.mockImplementation(
+        // Mock a slow read
+        mockDecoder.read = jest.fn().mockImplementation(
             () =>
                 new Promise((resolve) =>
-                    setTimeout(() => resolve(mockFitData), 100)
+                    setTimeout(
+                        () =>
+                            resolve({
+                                messages: {
+                                    sessionMesgs: [
+                                        {
+                                            sport: "cycling",
+                                            startTime: new Date(
+                                                "2023-01-01T10:00:00"
+                                            ),
+                                            totalElapsedTime: 5400,
+                                            totalDistance: 10500,
+                                            avgSpeed: 7.027777,
+                                            maxSpeed: 12.555555,
+                                            totalCalories: 650,
+                                            avgHeartRate: 155,
+                                            maxHeartRate: 185,
+                                        },
+                                    ],
+                                    recordMesgs: [
+                                        {
+                                            positionLat: 45.0,
+                                            positionLong: -122.0,
+                                            altitude: 100,
+                                            timestamp: new Date(
+                                                "2023-01-01T10:00:00"
+                                            ),
+                                            heartRate: 150,
+                                        },
+                                        {
+                                            positionLat: 45.1,
+                                            positionLong: -122.1,
+                                            altitude: 105,
+                                            timestamp: new Date(
+                                                "2023-01-01T10:01:00"
+                                            ),
+                                            heartRate: 155,
+                                        },
+                                    ],
+                                    activityMesgs: [],
+                                    deviceInfoMesgs: [
+                                        {
+                                            manufacturer: "Garmin",
+                                            product: "Edge 530",
+                                        },
+                                    ],
+                                },
+                                errors: [],
+                            }),
+                        100
+                    )
                 )
         );
 
@@ -204,8 +262,8 @@ describe("App", () => {
     });
 
     test("should handle parsing errors", async () => {
-        // Mock parse to throw error
-        mockParse.mockRejectedValue(new Error("Failed to parse FIT file"));
+        // Mock isFIT to throw error
+        (Decoder.isFIT as jest.Mock) = jest.fn().mockReturnValue(false);
 
         const user = userEvent.setup();
         render(<App />);
@@ -274,10 +332,60 @@ describe("App", () => {
 
     test("should disable input while loading", async () => {
         const user = userEvent.setup();
-        mockParse.mockImplementation(
+        mockDecoder.read = jest.fn().mockImplementation(
             () =>
                 new Promise((resolve) =>
-                    setTimeout(() => resolve(mockFitData), 500)
+                    setTimeout(
+                        () =>
+                            resolve({
+                                messages: {
+                                    sessionMesgs: [
+                                        {
+                                            sport: "cycling",
+                                            startTime: new Date(
+                                                "2023-01-01T10:00:00"
+                                            ),
+                                            totalElapsedTime: 5400,
+                                            totalDistance: 10500,
+                                            avgSpeed: 7.027777,
+                                            maxSpeed: 12.555555,
+                                            totalCalories: 650,
+                                            avgHeartRate: 155,
+                                            maxHeartRate: 185,
+                                        },
+                                    ],
+                                    recordMesgs: [
+                                        {
+                                            positionLat: 45.0,
+                                            positionLong: -122.0,
+                                            altitude: 100,
+                                            timestamp: new Date(
+                                                "2023-01-01T10:00:00"
+                                            ),
+                                            heartRate: 150,
+                                        },
+                                        {
+                                            positionLat: 45.1,
+                                            positionLong: -122.1,
+                                            altitude: 105,
+                                            timestamp: new Date(
+                                                "2023-01-01T10:01:00"
+                                            ),
+                                            heartRate: 155,
+                                        },
+                                    ],
+                                    activityMesgs: [],
+                                    deviceInfoMesgs: [
+                                        {
+                                            manufacturer: "Garmin",
+                                            product: "Edge 530",
+                                        },
+                                    ],
+                                },
+                                errors: [],
+                            }),
+                        500
+                    )
                 )
         );
 

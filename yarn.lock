@@ -1112,6 +1112,11 @@
     "@eslint/core" "^0.16.0"
     levn "^0.4.1"
 
+"@garmin/fitsdk@^21.178.0":
+  version "21.178.0"
+  resolved "https://registry.yarnpkg.com/@garmin/fitsdk/-/fitsdk-21.178.0.tgz#072afb1e54c82332cd0943987ece08e1a84c50f7"
+  integrity sha512-FK+gWvGbWiLg683IosRwLuv56eXD5b2QE7AwT7h6II5Ck7qRlwGbYCw0C6dVyJCZ5LDdhk5CbhiZ2zHGi6jjAw==
+
 "@humanfs/core@^0.19.1":
   version "0.19.1"
   resolved "https://registry.yarnpkg.com/@humanfs/core/-/core-0.19.1.tgz#17c55ca7d426733fe3c561906b8173c336b40a77"

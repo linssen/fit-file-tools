@@ -1,10 +1,14 @@
-import FitParser from "fit-file-parser";
+import { Decoder, Stream } from "@garmin/fitsdk";
 
-interface FitDataRaw {
-    sessions?: unknown[];
-    records?: unknown[];
-    activities?: unknown[];
-    devices?: unknown[];
+interface FitMessage {
+    [key: string]: unknown;
+}
+
+interface FitMessages {
+    sessionMesgs?: FitMessage[];
+    recordMesgs?: FitMessage[];
+    activityMesgs?: FitMessage[];
+    deviceInfoMesgs?: FitMessage[];
 }
 
 export interface ActivitySummary {
@@ -60,40 +64,44 @@ export interface ParsedFitData extends OrganizedData {
 }
 
 /**
- * FIT File Parser wrapper using fit-file-parser library
+ * FIT File Parser wrapper using @garmin/fitsdk
  * Handles parsing of Garmin FIT files
  */
 class FitFileParser {
-    private parser: FitParser;
-
-    constructor() {
-        this.parser = new FitParser();
-    }
-
     /**
      * Parse FIT file buffer
      */
     async parse(buffer: ArrayBuffer): Promise<ParsedFitData> {
         try {
-            // Convert ArrayBuffer to Buffer for the parser
-            const fitBuffer = Buffer.from(buffer);
+            // Create stream from ArrayBuffer
+            const stream = Stream.fromArrayBuffer(buffer);
 
-            // Parse the FIT file using callback-based API
-            const fitData = await new Promise<FitDataRaw>((resolve, reject) => {
-                this.parser.parse(
-                    fitBuffer,
-                    (error: Error | null, data: unknown) => {
-                        if (error) {
-                            reject(error);
-                        } else {
-                            resolve(data as FitDataRaw);
-                        }
-                    }
-                );
+            // Check if it's a valid FIT file
+            if (!Decoder.isFIT(stream)) {
+                throw new Error("Invalid FIT file format");
+            }
+
+            // Create decoder and parse
+            const decoder = new Decoder(stream);
+
+            // Read all messages with options
+            const { messages, errors } = decoder.read({
+                applyScaleAndOffset: true,
+                expandSubFields: true,
+                expandComponents: true,
+                convertTypesToStrings: true,
+                convertDateTimesToDates: true,
+                includeUnknownData: false,
+                mergeHeartRates: false,
             });
 
+            // Check for errors
+            if (errors.length > 0) {
+                console.warn("FIT parsing warnings:", errors);
+            }
+
             // Extract and organize the data
-            const organized = this.organizeData(fitData);
+            const organized = this.organizeData(messages);
 
             return {
                 success: true,
@@ -110,8 +118,11 @@ class FitFileParser {
     /**
      * Organize parsed FIT data into structured format
      */
-    organizeData(fitData: FitDataRaw): OrganizedData {
-        const { sessions, records, activities, devices } = fitData;
+    organizeData(messages: FitMessages): OrganizedData {
+        const sessions = messages.sessionMesgs || [];
+        const records = messages.recordMesgs || [];
+        const activities = messages.activityMesgs || [];
+        const devices = messages.deviceInfoMesgs || [];
 
         return {
             summary: this.extractSummary(sessions, activities),
@@ -119,10 +130,10 @@ class FitFileParser {
             heartRateData: this.extractHeartRateData(records),
             deviceInfo: this.extractDeviceInfo(devices),
             rawData: {
-                sessions: sessions?.length || 0,
-                records: records?.length || 0,
-                activities: activities?.length || 0,
-                devices: devices?.length || 0,
+                sessions: sessions.length,
+                records: records.length,
+                activities: activities.length,
+                devices: devices.length,
             },
         };
     }
@@ -131,15 +142,11 @@ class FitFileParser {
      * Extract activity summary information
      */
     extractSummary(
-        sessions: unknown[] = [],
-        activities: unknown[] = []
+        sessions: FitMessage[] = [],
+        activities: FitMessage[] = []
     ): ActivitySummary {
-        const session = sessions[0] as
-            | Record<string, string | number | undefined>
-            | undefined;
-        const activity = activities[0] as
-            | Record<string, string | number | undefined>
-            | undefined;
+        const session = sessions[0];
+        const activity = activities[0];
 
         if (!session && !activity) {
             return { message: "No session or activity data found" };
@@ -148,40 +155,40 @@ class FitFileParser {
         const summary: ActivitySummary = {};
 
         if (session) {
+            // Note: @garmin/fitsdk uses camelCase field names
             summary.sport =
                 typeof session.sport === "string" ? session.sport : "Unknown";
             summary.totalElapsedTime =
-                typeof session.total_elapsed_time === "number"
-                    ? this.formatDuration(session.total_elapsed_time)
+                typeof session.totalElapsedTime === "number"
+                    ? this.formatDuration(session.totalElapsedTime)
                     : null;
             summary.totalDistance =
-                typeof session.total_distance === "number"
-                    ? `${(session.total_distance / 1000).toFixed(2)} km`
+                typeof session.totalDistance === "number"
+                    ? `${(session.totalDistance / 1000).toFixed(2)} km`
                     : null;
             summary.avgSpeed =
-                typeof session.avg_speed === "number"
-                    ? `${(session.avg_speed * 3.6).toFixed(1)} km/h`
+                typeof session.avgSpeed === "number"
+                    ? `${(session.avgSpeed * 3.6).toFixed(1)} km/h`
                     : null;
             summary.maxSpeed =
-                typeof session.max_speed === "number"
-                    ? `${(session.max_speed * 3.6).toFixed(1)} km/h`
+                typeof session.maxSpeed === "number"
+                    ? `${(session.maxSpeed * 3.6).toFixed(1)} km/h`
                     : null;
             summary.totalCalories =
-                typeof session.total_calories === "number"
-                    ? session.total_calories
+                typeof session.totalCalories === "number"
+                    ? session.totalCalories
                     : null;
             summary.avgHeartRate =
-                typeof session.avg_heart_rate === "number"
-                    ? session.avg_heart_rate
+                typeof session.avgHeartRate === "number"
+                    ? session.avgHeartRate
                     : null;
             summary.maxHeartRate =
-                typeof session.max_heart_rate === "number"
-                    ? session.max_heart_rate
+                typeof session.maxHeartRate === "number"
+                    ? session.maxHeartRate
                     : null;
             summary.startTime =
-                typeof session.start_time === "string" ||
-                typeof session.start_time === "number"
-                    ? new Date(session.start_time).toLocaleString()
+                session.startTime instanceof Date
+                    ? session.startTime.toLocaleString()
                     : null;
         }
 
@@ -191,64 +198,42 @@ class FitFileParser {
     /**
      * Extract GPS track data
      */
-    extractGpsData(records: unknown[] = []): GpsPoint[] {
+    extractGpsData(records: FitMessage[] = []): GpsPoint[] {
         return records
             .filter(
-                (record): record is Record<string, unknown> =>
-                    typeof record === "object" &&
-                    record !== null &&
-                    "position_lat" in record &&
-                    "position_long" in record
+                (record) => "positionLat" in record && "positionLong" in record
             )
             .map((record) => ({
-                lat: this.convertSemicirclesToDegrees(
-                    record.position_lat as number
-                ),
-                lng: this.convertSemicirclesToDegrees(
-                    record.position_long as number
-                ),
+                // @garmin/fitsdk automatically converts semicircles to degrees
+                lat: record.positionLat as number,
+                lng: record.positionLong as number,
                 elevation:
                     typeof record.altitude === "number"
                         ? record.altitude
                         : null,
                 timestamp:
-                    record.timestamp instanceof Date ||
-                    typeof record.timestamp === "string" ||
-                    typeof record.timestamp === "number"
-                        ? new Date(record.timestamp)
-                        : null,
+                    record.timestamp instanceof Date ? record.timestamp : null,
             }));
     }
 
     /**
      * Extract heart rate data
      */
-    extractHeartRateData(records: unknown[] = []): HeartRateData[] {
+    extractHeartRateData(records: FitMessage[] = []): HeartRateData[] {
         return records
-            .filter(
-                (record): record is Record<string, unknown> =>
-                    typeof record === "object" &&
-                    record !== null &&
-                    "heart_rate" in record
-            )
+            .filter((record) => "heartRate" in record)
             .map((record) => ({
-                heartRate: record.heart_rate as number,
+                heartRate: record.heartRate as number,
                 timestamp:
-                    record.timestamp instanceof Date ||
-                    typeof record.timestamp === "string" ||
-                    typeof record.timestamp === "number"
-                        ? new Date(record.timestamp)
-                        : null,
+                    record.timestamp instanceof Date ? record.timestamp : null,
             }));
     }
 
     /**
      * Extract device information
      */
-    extractDeviceInfo(devices: unknown[] = []): DeviceInfo {
-        const device = devices[0] as
-            | Record<string, string | number | undefined>
-            | undefined;
+    extractDeviceInfo(devices: FitMessage[] = []): DeviceInfo {
+        const device = devices[0];
         if (!device) return { message: "No device information found" };
 
         return {
@@ -257,27 +242,23 @@ class FitFileParser {
                     ? device.manufacturer
                     : "Unknown",
             product:
-                typeof device.product === "string" ? device.product : "Unknown",
+                typeof device.product === "string" ||
+                typeof device.product === "number"
+                    ? String(device.product)
+                    : "Unknown",
             serialNumber:
-                typeof device.serial_number === "number"
-                    ? device.serial_number
+                typeof device.serialNumber === "number"
+                    ? device.serialNumber
                     : null,
             softwareVersion:
-                typeof device.software_version === "number"
-                    ? device.software_version
+                typeof device.softwareVersion === "number"
+                    ? device.softwareVersion
                     : null,
             hardwareVersion:
-                typeof device.hardware_version === "number"
-                    ? device.hardware_version
+                typeof device.hardwareVersion === "number"
+                    ? device.hardwareVersion
                     : null,
         };
-    }
-
-    /**
-     * Convert semicircles to degrees (Garmin GPS format)
-     */
-    convertSemicirclesToDegrees(semicircles: number): number {
-        return semicircles * (180 / Math.pow(2, 31));
     }
 
     /**
