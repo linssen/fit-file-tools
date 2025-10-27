@@ -1,9 +1,14 @@
 import { useState, useCallback } from "react";
 import FitFileParser, { type ParsedFitData } from "./fitParser";
+import FitFileEncoder, {
+    type DeviceModifications,
+    type FieldModifications,
+} from "./fitEncoder";
 import FileUpload from "./components/FileUpload";
 import FileInfo from "./components/FileInfo";
 import ActivitySummary from "./components/ActivitySummary";
 import DataPreview from "./components/DataPreview";
+import FieldEditor from "./components/FieldEditor";
 import "./styles.css";
 
 export default function App() {
@@ -11,8 +16,10 @@ export default function App() {
     const [error, setError] = useState<string | null>(null);
     const [fitData, setFitData] = useState<ParsedFitData | null>(null);
     const [fileName, setFileName] = useState<string>("");
+    const [isEditing, setIsEditing] = useState(false);
 
     const parser = new FitFileParser();
+    const encoder = new FitFileEncoder();
 
     const handleFileSelect = useCallback(async (file: File) => {
         try {
@@ -40,6 +47,39 @@ export default function App() {
         }
     }, []);
 
+    const handleModifyDevice = useCallback(
+        (modifications: DeviceModifications) => {
+            if (!fitData || !fitData.rawMessages) {
+                setError("No FIT data available to modify");
+                return;
+            }
+
+            try {
+                // Create field modifications
+                const fieldMods: FieldModifications = {
+                    device: modifications,
+                };
+
+                // Encode with modifications
+                const modifiedData = encoder.encodeWithModifications(
+                    fitData.rawMessages,
+                    fieldMods
+                );
+
+                // Trigger download
+                encoder.createDownload(modifiedData, fileName);
+
+                // Close the editor
+                setIsEditing(false);
+            } catch (err) {
+                const errorMessage =
+                    err instanceof Error ? err.message : String(err);
+                setError(`Error modifying file: ${errorMessage}`);
+            }
+        },
+        [fitData, fileName]
+    );
+
     return (
         <div className="container">
             <header>
@@ -57,13 +97,37 @@ export default function App() {
 
             {loading && <div className="loading">Parsing file...</div>}
 
-            {fitData && !loading && (
+            {fitData && !loading && !isEditing && (
                 <div id="resultsSection" className="results">
                     <FileInfo fileName={fileName} fitData={fitData} />
                     <ActivitySummary summary={fitData.summary} />
                     <DataPreview
                         gpsData={fitData.gpsData}
                         heartRateData={fitData.heartRateData}
+                    />
+                    <div className="actions">
+                        <button
+                            type="button"
+                            onClick={() => setIsEditing(true)}
+                            className="button-primary"
+                        >
+                            Modify Device Info & Download
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {fitData && !loading && isEditing && (
+                <div className="editor-section">
+                    <FieldEditor
+                        currentDevice={{
+                            manufacturer: fitData.deviceInfo.manufacturer,
+                            product: fitData.deviceInfo.product,
+                            serialNumber: fitData.deviceInfo.serialNumber,
+                            softwareVersion: fitData.deviceInfo.softwareVersion,
+                        }}
+                        onModify={handleModifyDevice}
+                        onCancel={() => setIsEditing(false)}
                     />
                 </div>
             )}

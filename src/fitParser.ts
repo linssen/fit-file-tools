@@ -61,6 +61,7 @@ export interface OrganizedData {
 export interface ParsedFitData extends OrganizedData {
     success: boolean;
     fileSize: number;
+    rawMessages?: Record<string, unknown[]>; // Add raw messages for encoding
 }
 
 /**
@@ -106,6 +107,7 @@ class FitFileParser {
             return {
                 success: true,
                 fileSize: buffer.byteLength,
+                rawMessages: messages, // Include raw messages for encoding
                 ...organized,
             };
         } catch (error: unknown) {
