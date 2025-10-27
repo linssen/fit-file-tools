@@ -17,14 +17,19 @@
         "prepare": "yarn build"
     },
     "dependencies": {
-        "fit-file-parser": "^1.21.0"
+        "fit-file-parser": "^1.21.0",
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0"
     },
     "devDependencies": {
         "@babel/core": "^7.28.5",
         "@babel/preset-env": "^7.28.5",
+        "@babel/preset-react": "^7.28.5",
         "@babel/preset-typescript": "^7.28.5",
         "@types/jest": "^30.0.0",
         "@types/node": "^24.9.1",
+        "@types/react": "^19.2.2",
+        "@types/react-dom": "^19.2.2",
         "@typescript-eslint/eslint-plugin": "^8.46.2",
         "@typescript-eslint/parser": "^8.46.2",
         "babel-loader": "^10.0.0",

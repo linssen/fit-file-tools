@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 
 module.exports = {
-    entry: "./src/index.ts",
+    entry: "./src/index.tsx",
     output: {
         path: path.resolve(__dirname, "dist"),
         filename: "bundle.[contenthash].js",
@@ -16,12 +16,6 @@ module.exports = {
                 exclude: /node_modules/,
                 use: {
                     loader: "babel-loader",
-                    options: {
-                        presets: [
-                            "@babel/preset-env",
-                            "@babel/preset-typescript",
-                        ],
-                    },
                 },
             },
             {
