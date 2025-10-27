@@ -8,6 +8,7 @@ import FileUpload from "./components/FileUpload";
 import FileInfo from "./components/FileInfo";
 import ActivitySummary from "./components/ActivitySummary";
 import DataPreview from "./components/DataPreview";
+import MapView from "./components/MapView";
 import FieldEditor from "./components/FieldEditor";
 import "./styles.css";
 
@@ -101,6 +102,7 @@ export default function App() {
                 <div id="resultsSection" className="results">
                     <FileInfo fileName={fileName} fitData={fitData} />
                     <ActivitySummary summary={fitData.summary} />
+                    <MapView gpsData={fitData.gpsData} />
                     <DataPreview
                         gpsData={fitData.gpsData}
                         heartRateData={fitData.heartRateData}
