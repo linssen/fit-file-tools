@@ -60,6 +60,8 @@ fitfiles/
 -   **Error Handling**: Try-catch blocks with user-friendly error messages
 -   **ES6 Modules**: Import/export syntax with Webpack bundling
 -   **Library Integration**: Wraps `fit-file-parser` for consistent API and error handling
+-   **Code Quality**: ESLint for linting, Prettier for formatting
+-   **Type Safety**: Strict TypeScript with comprehensive type annotations
 
 ## Development Workflow
 
@@ -67,6 +69,10 @@ fitfiles/
 -   **Testing**: `yarn test` - runs Jest test suite
 -   **Building**: `yarn build` - creates production bundle in `dist/`
 -   **Test Coverage**: `yarn test:coverage` - generates coverage reports
+-   **Linting**: `yarn lint` - checks code with ESLint
+-   **Auto-fix**: `yarn lint:fix` - automatically fixes linting issues
+-   **Formatting**: `yarn format` - formats code with Prettier
+-   **Format Check**: `yarn format:check` - checks code formatting
 
 ## Testing Workflow
 
