@@ -1,5 +1,6 @@
 // Jest setup file
 import "jest-environment-jsdom";
+import "@testing-library/jest-dom";
 
 // Mock File API for testing
 global.FileReader = class {

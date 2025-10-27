@@ -20,6 +20,9 @@ module.exports = {
         "^.+\\.(ts|tsx|js|jsx)$": "babel-jest",
     },
     transformIgnorePatterns: ["node_modules/(?!(fit-file-parser|buffer)/)"],
+    moduleNameMapper: {
+        "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+    },
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
     verbose: true,
 };
