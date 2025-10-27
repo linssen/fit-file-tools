@@ -71,15 +71,26 @@ class FitFileParser {
     }
 
     /**
-     * Parse a FIT file from ArrayBuffer
+     * Parse FIT file buffer
      */
     async parse(buffer: ArrayBuffer): Promise<ParsedFitData> {
         try {
             // Convert ArrayBuffer to Buffer for the parser
             const fitBuffer = Buffer.from(buffer);
 
-            // Parse the FIT file
-            const fitData = this.parser.parse(fitBuffer) as FitDataRaw;
+            // Parse the FIT file using callback-based API
+            const fitData = await new Promise<FitDataRaw>((resolve, reject) => {
+                this.parser.parse(
+                    fitBuffer,
+                    (error: Error | null, data: unknown) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(data as FitDataRaw);
+                        }
+                    }
+                );
+            });
 
             // Extract and organize the data
             const organized = this.organizeData(fitData);
