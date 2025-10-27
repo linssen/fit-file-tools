@@ -9,10 +9,10 @@ describe.skip("FitFileParser Integration", () => {
         // Parser will be initialized when we solve the ES module issue
     });
 
-    test("should parse real FIT file from Wahoo ELEMNT ROAM", async () => {
+    test("should parse generated test FIT file", async () => {
         // TODO: Re-enable when ES module issues are resolved
         // Read the fixture file
-        // const fixturePath = path.join(__dirname, "fixtures", "sample.fit");
+        // const fixturePath = path.join(__dirname, "fixtures", "test-activity.fit");
         // const fileBuffer = fs.readFileSync(fixturePath);
         // const arrayBuffer = fileBuffer.buffer.slice(
         //     fileBuffer.byteOffset,

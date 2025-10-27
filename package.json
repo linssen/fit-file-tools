@@ -10,6 +10,7 @@
         "test": "jest",
         "test:watch": "jest --watch",
         "test:coverage": "jest --coverage",
+        "generate:test-fit": "node scripts/generateTestFit.js",
         "lint": "tsc --noEmit && eslint src/**/*.ts src/**/*.tsx",
         "lint:fix": "eslint src/**/*.ts src/**/*.tsx --fix",
         "format": "prettier --write src/**/*.ts src/**/*.tsx src/**/*.css src/**/*.html",

@@ -9,6 +9,8 @@ coverage/
 
 # Test fixtures (FIT files can be large)
 src/__tests__/fixtures/*.fit
+# Except the generated test file (no sensitive data)
+!src/__tests__/fixtures/test-activity.fit
 
 # Production build
 dist/
