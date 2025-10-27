@@ -6,10 +6,13 @@ global.FileReader = class {
     result: ArrayBuffer | null = null;
     error: Error | null = null;
     readyState: number = 0;
-    onload: ((event: any) => void) | null = null;
-    onerror: ((event: any) => void) | null = null;
+    onload:
+        | ((event: { target: { result: ArrayBuffer | null } }) => void)
+        | null = null;
+    onerror: ((event: { target: { error: Error | null } }) => void) | null =
+        null;
 
-    readAsArrayBuffer(file: any): void {
+    readAsArrayBuffer(file: { size?: number }): void {
         // Simulate async file reading
         setTimeout(() => {
             if (this.onload) {
@@ -18,7 +21,7 @@ global.FileReader = class {
             }
         }, 10);
     }
-} as any;
+} as unknown as typeof FileReader;
 
 // Mock Buffer for browser environment
 if (typeof global.Buffer === "undefined") {

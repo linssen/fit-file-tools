@@ -72,9 +72,14 @@ describe("FitFileApp", () => {
         const mockFile = new File([""], "test.txt", { type: "text/plain" });
 
         // Spy on showError method
-        const showErrorSpy = jest.spyOn(app as any, "showError");
+        const showErrorSpy = jest.spyOn(
+            app as unknown as { showError: (message: string) => void },
+            "showError"
+        );
 
-        await (app as any).handleFile(mockFile);
+        await (
+            app as unknown as { handleFile: (file: File) => Promise<void> }
+        ).handleFile(mockFile);
 
         expect(showErrorSpy).toHaveBeenCalledWith("Please select a .fit file");
     });
@@ -85,9 +90,14 @@ describe("FitFileApp", () => {
             type: "application/octet-stream",
         });
 
-        const showErrorSpy = jest.spyOn(app as any, "showError");
+        const showErrorSpy = jest.spyOn(
+            app as unknown as { showError: (message: string) => void },
+            "showError"
+        );
 
-        await (app as any).handleFile(mockFile);
+        await (
+            app as unknown as { handleFile: (file: File) => Promise<void> }
+        ).handleFile(mockFile);
 
         expect(showErrorSpy).toHaveBeenCalledWith(
             "File too large. Maximum size is 50MB"
@@ -121,7 +131,11 @@ describe("FitFileApp", () => {
             heartRateData: [],
         };
 
-        const html = (app as any).generateFileInfoHTML(mockFile, mockFitData);
+        const html = (
+            app as unknown as {
+                generateFileInfoHTML: (file: File, fitData: unknown) => string;
+            }
+        ).generateFileInfoHTML(mockFile, mockFitData);
 
         expect(html).toContain("test.fit");
         expect(html).toContain("cycling");
@@ -147,7 +161,11 @@ describe("FitFileApp", () => {
             fileSize: 1024,
         };
 
-        const html = (app as any).generateDataDisplayHTML(mockFitData);
+        const html = (
+            app as unknown as {
+                generateDataDisplayHTML: (fitData: unknown) => string;
+            }
+        ).generateDataDisplayHTML(mockFitData);
 
         expect(html).toContain("FIT file parsed successfully");
         expect(html).toContain("2 GPS points");
@@ -161,7 +179,11 @@ describe("FitFileApp", () => {
             type: "application/octet-stream",
         });
 
-        const buffer = await (app as any).readFileAsArrayBuffer(mockFile);
+        const buffer = await (
+            app as unknown as {
+                readFileAsArrayBuffer: (file: File) => Promise<ArrayBuffer>;
+            }
+        ).readFileAsArrayBuffer(mockFile);
 
         expect(buffer).toBeInstanceOf(ArrayBuffer);
     });
