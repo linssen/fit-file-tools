@@ -54,21 +54,84 @@ A standalone React web application for reading and parsing Garmin FIT files dire
    yarn build
    ```
 
+## Development Workflow
+
+This project uses a Pull Request workflow with automated quality checks.
+
+### Branch Strategy
+
+-   **Main Branch (`main`)**: Production-ready code, protected branch
+-   **Feature Branches**: All development happens in feature branches
+
+### Making Changes
+
+1. **Create a feature branch:**
+
+    ```bash
+    git checkout -b feature/your-feature-name
+    ```
+
+2. **Make your changes and test locally:**
+
+    ```bash
+    yarn lint          # Check code quality
+    yarn format:check  # Check code formatting
+    yarn test          # Run all tests
+    yarn build         # Verify build works
+    ```
+
+3. **Commit your changes:**
+
+    ```bash
+    git add .
+    git commit -m "Description of your changes"
+    ```
+
+4. **Push to GitHub:**
+
+    ```bash
+    git push origin feature/your-feature-name
+    ```
+
+5. **Create a Pull Request:**
+    - Go to your repository on GitHub
+    - Click "Compare & pull request"
+    - Fill in the PR description
+    - Wait for automated checks to pass:
+        - ✅ Linting (ESLint)
+        - ✅ Formatting (Prettier)
+        - ✅ Tests (Jest with coverage)
+        - ✅ Build verification
+    - Request review if needed
+    - Merge when all checks pass
+
+### Pull Request Checks
+
+Every PR automatically runs:
+
+-   **Lint**: ESLint checks for code quality issues
+-   **Format**: Prettier verifies consistent code formatting
+-   **Test**: Jest runs full test suite with coverage reporting
+-   **Build**: Webpack creates production bundle to ensure no build errors
+
 ### GitHub Pages Deployment
 
 This project automatically deploys to GitHub Pages using GitHub Actions:
 
-1. Push code to your GitHub repository's `master` branch
+1. Push code to your GitHub repository's `main` branch (via merged PRs)
 2. GitHub Actions will automatically build and deploy
 3. Go to repository Settings → Pages
 4. Ensure "GitHub Actions" is selected as the source
 5. Your app will be available at `https://yourusername.github.io/repositoryname`
 
-The workflow runs on every push to `master` and includes:
-- Dependency installation
+The deployment workflow runs on every push to `main` and includes:
+- Linting checks
+- Code formatting verification
 - Test execution
 - Production build
 - Automatic deployment
+
+**Important:** The `main` branch should be protected to require PR reviews and passing checks before merging.
 
 ## Testing
 
