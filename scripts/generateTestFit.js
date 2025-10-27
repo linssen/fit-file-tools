@@ -3,7 +3,8 @@
  * This creates a simple activity file with synthetic data - no real personal information
  */
 
-const { Encoder, Profile, Utils } = require("@garmin/fitsdk");
+/* eslint-disable no-console */
+const { Encoder, Profile } = require("@garmin/fitsdk");
 const fs = require("fs");
 const path = require("path");
 
