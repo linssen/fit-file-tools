@@ -139,10 +139,7 @@ class FitFileApp {
         resultsSection.scrollIntoView({ behavior: "smooth" });
     }
 
-    private generateFileInfoHTML(
-        file: File,
-        fitData: ParsedFitData
-    ): string {
+    private generateFileInfoHTML(file: File, fitData: ParsedFitData): string {
         const { summary, rawData, deviceInfo } = fitData;
 
         return `
@@ -163,15 +160,15 @@ class FitFileApp {
                     summary.totalDistance || "Unknown"
                 }</p>
                 <p><strong>Device:</strong> ${deviceInfo.manufacturer || "Unknown"} ${
-            deviceInfo.product || ""
-        }</p>
+                    deviceInfo.product || ""
+                }</p>
                 <p><strong>Data Records:</strong> ${rawData.records}</p>
             </div>
         `;
     }
 
     private generateDataDisplayHTML(fitData: ParsedFitData): string {
-        const { summary, gpsData, heartRateData, deviceInfo } = fitData;
+        const { summary, gpsData, heartRateData } = fitData;
 
         let html = `<div class="success">
             <h4>✓ FIT file parsed successfully!</h4>

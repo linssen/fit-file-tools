@@ -1,0 +1,12 @@
+# Ignore build output and dependencies
+dist/
+node_modules/
+coverage/
+
+# Ignore lock files
+package-lock.json
+yarn.lock
+
+# Ignore config files that should maintain their own formatting
+*.min.js
+*.min.css
