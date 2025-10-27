@@ -79,7 +79,7 @@ class FitFileParser {
             const fitBuffer = Buffer.from(buffer);
 
             // Parse the FIT file
-            const fitData: FitDataRaw = this.parser.parse(fitBuffer);
+            const fitData = this.parser.parse(fitBuffer) as FitDataRaw;
 
             // Extract and organize the data
             const organized = this.organizeData(fitData);

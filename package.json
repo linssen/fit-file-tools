@@ -10,7 +10,7 @@
         "test": "jest",
         "test:watch": "jest --watch",
         "test:coverage": "jest --coverage",
-        "lint": "eslint src/**/*.ts",
+        "lint": "tsc --noEmit && eslint src/**/*.ts",
         "lint:fix": "eslint src/**/*.ts --fix",
         "format": "prettier --write src/**/*.ts src/**/*.css src/**/*.html",
         "format:check": "prettier --check src/**/*.ts src/**/*.css src/**/*.html",
