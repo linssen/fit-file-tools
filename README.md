@@ -12,11 +12,39 @@ A standalone HTML/JavaScript web application for reading and parsing Garmin FIT 
 
 ## Getting Started
 
+### Prerequisites
+
+- Node.js 14+ and Yarn package manager
+- Git for version control
+
 ### Local Development
 
-1. Clone or download this repository
-2. Open `index.html` in your web browser
-3. Upload a `.fit` file to see it parsed
+1. Clone this repository
+   ```bash
+   git clone <your-repo-url>
+   cd fitfiles
+   ```
+
+2. Install dependencies
+   ```bash
+   yarn install
+   ```
+
+3. Start development server
+   ```bash
+   yarn dev
+   ```
+   The app will open at http://localhost:9000
+
+4. Run tests
+   ```bash
+   yarn test
+   ```
+
+5. Build for production
+   ```bash
+   yarn build
+   ```
 
 ### GitHub Pages Deployment
 
