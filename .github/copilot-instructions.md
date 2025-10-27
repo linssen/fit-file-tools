@@ -13,12 +13,13 @@ This is a standalone HTML/JavaScript web application for reading and parsing Gar
 
 ## Technical Stack
 
--   **Frontend:** Modern JavaScript (ES6+) with Webpack bundling
+-   **Frontend:** Modern TypeScript with Webpack bundling
 -   **FIT Parsing:** `fit-file-parser` by jimmykane (browser-compatible)
 -   **File Handling:** HTML5 File API for local file uploads
 -   **Testing:** Jest with jsdom environment
--   **Build System:** Webpack with Babel transpilation
+-   **Build System:** Webpack with Babel transpilation (TypeScript support)
 -   **Package Manager:** Yarn
+-   **Type Safety:** Strict TypeScript configuration
 
 ## Key Considerations
 
@@ -33,19 +34,22 @@ This is a standalone HTML/JavaScript web application for reading and parsing Gar
 fitfiles/
 ├── src/
 │   ├── index.html          # HTML template for webpack
-│   ├── index.js            # Main entry point
+│   ├── index.ts            # Main entry point (TypeScript)
 │   ├── styles.css          # Application styles
-│   ├── app.js              # Main application logic (FitFileApp class)
-│   ├── fitParser.js        # FIT file parsing wrapper (FitFileParser class)
+│   ├── app.ts              # Main application logic (FitFileApp class)
+│   ├── fitParser.ts        # FIT file parsing wrapper (FitFileParser class)
+│   ├── fit-file-parser.d.ts # Type declarations for fit-file-parser
 │   └── __tests__/
-│       ├── setup.js        # Jest test setup and mocks
-│       ├── app.test.js     # FitFileApp tests
-│       └── fitParser.test.js # FitFileParser tests
+│       ├── setup.ts        # Jest test setup and mocks
+│       ├── app.test.ts     # FitFileApp tests
+│       └── fitParser.test.ts # FitFileParser tests
 ├── dist/                   # Built files (auto-generated)
 ├── package.json            # Dependencies and scripts
 ├── webpack.config.js       # Webpack configuration
 ├── jest.config.js          # Jest test configuration
 ├── .babelrc.js            # Babel transpilation config
+├── tsconfig.json          # TypeScript configuration
+├── .gitignore             # Git ignore patterns
 └── README.md              # Project documentation
 ```
 
