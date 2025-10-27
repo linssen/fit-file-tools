@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const webpack = require("webpack");
 
 module.exports = {
     entry: "./src/index.ts",
@@ -33,6 +34,9 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: "./src/index.html",
             title: "FIT File Reader",
+        }),
+        new webpack.ProvidePlugin({
+            Buffer: ["buffer", "Buffer"],
         }),
     ],
     devServer: {
