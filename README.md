@@ -189,7 +189,7 @@ fitfiles/
 - **Webpack 5** - Module bundling
 - **Jest** - Testing framework
 - **React Testing Library** - Component testing
-- **fit-file-parser** - FIT protocol implementation
+- **@garmin/fitsdk** - Official Garmin FIT SDK (read/write support)
 - **ESLint + Prettier** - Code quality
 
 ## FIT File Format

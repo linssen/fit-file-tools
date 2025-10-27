@@ -19,7 +19,6 @@
     },
     "dependencies": {
         "@garmin/fitsdk": "^21.178.0",
-        "fit-file-parser": "^1.21.0",
         "react": "^19.2.0",
         "react-dom": "^19.2.0"
     },

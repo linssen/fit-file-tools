@@ -14,7 +14,7 @@ This is a standalone HTML/JavaScript web application for reading and parsing Gar
 ## Technical Stack
 
 -   **Frontend:** Modern TypeScript with Webpack bundling
--   **FIT Parsing:** `fit-file-parser` by jimmykane (browser-compatible)
+-   **FIT Parsing:** `@garmin/fitsdk` - Official Garmin FIT SDK (supports both reading and writing)
 -   **File Handling:** HTML5 File API for local file uploads
 -   **Testing:** Jest with jsdom environment
 -   **Build System:** Webpack with Babel transpilation (TypeScript support)
@@ -23,7 +23,8 @@ This is a standalone HTML/JavaScript web application for reading and parsing Gar
 
 ## Key Considerations
 
--   **Binary Parsing:** Uses proven `fit-file-parser` library for robust FIT protocol support
+-   **Binary Parsing:** Uses official `@garmin/fitsdk` library with Decoder for robust FIT protocol support
+-   **File Modification:** Encoder class available for modifying and exporting FIT files
 -   **File Size:** FIT files can be large (GPS tracks) - library handles streaming efficiently
 -   **Browser Compatibility:** ES6+ with Babel transpilation for broader support
 -   **Privacy:** All data stays local - no server uploads
@@ -38,11 +39,13 @@ fitfiles/
 │   ├── styles.css          # Application styles
 │   ├── app.ts              # Main application logic (FitFileApp class)
 │   ├── fitParser.ts        # FIT file parsing wrapper (FitFileParser class)
-│   ├── fit-file-parser.d.ts # Type declarations for fit-file-parser
+│   ├── garmin-fitsdk.d.ts  # Type declarations for @garmin/fitsdk
 │   └── __tests__/
 │       ├── setup.ts        # Jest test setup and mocks
 │       ├── app.test.ts     # FitFileApp tests
 │       └── fitParser.test.ts # FitFileParser tests
+├── scripts/                # Utility scripts
+│   └── generateTestFit.js  # Generate synthetic test FIT files
 ├── dist/                   # Built files (auto-generated)
 ├── package.json            # Dependencies and scripts
 ├── webpack.config.js       # Webpack configuration
@@ -55,11 +58,11 @@ fitfiles/
 
 ## Development Patterns
 
--   **Class-based Architecture**: `FitFileApp` handles UI, `FitFileParser` wraps fit-file-parser library
+-   **Class-based Architecture**: `FitFileApp` handles UI, `FitFileParser` wraps @garmin/fitsdk library
 -   **Event-driven UI**: Drag-and-drop file upload with visual feedback
 -   **Error Handling**: Try-catch blocks with user-friendly error messages
 -   **ES6 Modules**: Import/export syntax with Webpack bundling
--   **Library Integration**: Wraps `fit-file-parser` for consistent API and error handling
+-   **Library Integration**: Wraps `@garmin/fitsdk` for consistent API and error handling
 -   **Code Quality**: ESLint for linting, Prettier for formatting
 -   **Type Safety**: Strict TypeScript with comprehensive type annotations
 
