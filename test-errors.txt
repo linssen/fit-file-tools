@@ -1,0 +1,1006 @@
+yarn run v1.22.22
+$ jest --verbose
+FAIL src/__tests__/index.test.tsx
+  index.tsx
+    ├ù should create root and render App (48 ms)
+    ├ù should throw error when root element not found (18 ms)
+
+  ÔùÅ index.tsx ÔÇ║ should create root and render App
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: <div id="root" />
+
+    Number of calls: 0
+
+      43 |
+      44 |         // Verify createRoot was called with the root element
+    > 45 |         expect(createRoot).toHaveBeenCalledWith(rootElement);
+         |                            ^
+      46 |
+      47 |         // Verify render was called
+      48 |         const mockRoot = (createRoot as jest.Mock).mock.results[0].value;
+
+      at Object.toHaveBeenCalledWith (src/__tests__/index.test.tsx:45:28)
+
+  ÔùÅ index.tsx ÔÇ║ should throw error when root element not found
+
+    NotFoundError: The node to be removed is not a child of this node.
+
+
+  console.warn
+    Unknown message type: fileIdMesgs
+
+    [0m [90m 90 |[39m         [36mconst[39m mesgNum [33m=[39m [36mthis[39m[33m.[39mgetMesgNum(mesgType)[33m;[39m
+     [90m 91 |[39m         [36mif[39m (mesgNum [33m===[39m undefined) {
+    [31m[1m>[22m[39m[90m 92 |[39m             console[33m.[39mwarn([32m`Unknown message type: ${mesgType}`[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 93 |[39m             [36mreturn[39m[33m;[39m
+     [90m 94 |[39m         }
+     [90m 95 |[39m[0m
+
+      at FitFileEncoder.warn [as writeMessage] (src/fitEncoder.ts:92:21)
+      at FitFileEncoder.writeMessage [as encodeWithModifications] (src/fitEncoder.ts:54:26)
+      at Object.encodeWithModifications (src/__tests__/fitEncoder.test.ts:63:36)
+
+  console.warn
+    Unknown message type: deviceInfoMesgs
+
+    [0m [90m 90 |[39m         [36mconst[39m mesgNum [33m=[39m [36mthis[39m[33m.[39mgetMesgNum(mesgType)[33m;[39m
+     [90m 91 |[39m         [36mif[39m (mesgNum [33m===[39m undefined) {
+    [31m[1m>[22m[39m[90m 92 |[39m             console[33m.[39mwarn([32m`Unknown message type: ${mesgType}`[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 93 |[39m             [36mreturn[39m[33m;[39m
+     [90m 94 |[39m         }
+     [90m 95 |[39m[0m
+
+      at FitFileEncoder.warn [as writeMessage] (src/fitEncoder.ts:92:21)
+      at FitFileEncoder.writeMessage [as encodeWithModifications] (src/fitEncoder.ts:54:26)
+      at Object.encodeWithModifications (src/__tests__/fitEncoder.test.ts:63:36)
+
+  console.warn
+    Unknown message type: sessionMesgs
+
+    [0m [90m 90 |[39m         [36mconst[39m mesgNum [33m=[39m [36mthis[39m[33m.[39mgetMesgNum(mesgType)[33m;[39m
+     [90m 91 |[39m         [36mif[39m (mesgNum [33m===[39m undefined) {
+    [31m[1m>[22m[39m[90m 92 |[39m             console[33m.[39mwarn([32m`Unknown message type: ${mesgType}`[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 93 |[39m             [36mreturn[39m[33m;[39m
+     [90m 94 |[39m         }
+     [90m 95 |[39m[0m
+
+      at FitFileEncoder.warn [as writeMessage] (src/fitEncoder.ts:92:21)
+      at FitFileEncoder.writeMessage [as encodeWithModifications] (src/fitEncoder.ts:54:26)
+      at Object.encodeWithModifications (src/__tests__/fitEncoder.test.ts:63:36)
+
+  console.warn
+    Unknown message type: fileIdMesgs
+
+    [0m [90m 90 |[39m         [36mconst[39m mesgNum [33m=[39m [36mthis[39m[33m.[39mgetMesgNum(mesgType)[33m;[39m
+     [90m 91 |[39m         [36mif[39m (mesgNum [33m===[39m undefined) {
+    [31m[1m>[22m[39m[90m 92 |[39m             console[33m.[39mwarn([32m`Unknown message type: ${mesgType}`[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 93 |[39m             [36mreturn[39m[33m;[39m
+     [90m 94 |[39m         }
+     [90m 95 |[39m[0m
+
+      at FitFileEncoder.warn [as writeMessage] (src/fitEncoder.ts:92:21)
+      at FitFileEncoder.writeMessage [as encodeWithModifications] (src/fitEncoder.ts:54:26)
+      at encodeWithModifications (src/__tests__/fitEncoder.test.ts:90:25)
+      at Object.<anonymous> (node_modules/expect/build/index.js:1824:9)
+      at Object.throwingMatcher [as toThrow] (node_modules/expect/build/index.js:2235:93)
+      at Object.toThrow (src/__tests__/fitEncoder.test.ts:91:16)
+
+  console.warn
+    Unknown message type: deviceInfoMesgs
+
+    [0m [90m 90 |[39m         [36mconst[39m mesgNum [33m=[39m [36mthis[39m[33m.[39mgetMesgNum(mesgType)[33m;[39m
+     [90m 91 |[39m         [36mif[39m (mesgNum [33m===[39m undefined) {
+    [31m[1m>[22m[39m[90m 92 |[39m             console[33m.[39mwarn([32m`Unknown message type: ${mesgType}`[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 93 |[39m             [36mreturn[39m[33m;[39m
+     [90m 94 |[39m         }
+     [90m 95 |[39m[0m
+
+      at FitFileEncoder.warn [as writeMessage] (src/fitEncoder.ts:92:21)
+      at FitFileEncoder.writeMessage [as encodeWithModifications] (src/fitEncoder.ts:54:26)
+      at Object.encodeWithModifications (src/__tests__/fitEncoder.test.ts:141:21)
+
+  console.warn
+    Unknown message type: deviceInfoMesgs
+
+    [0m [90m 90 |[39m         [36mconst[39m mesgNum [33m=[39m [36mthis[39m[33m.[39mgetMesgNum(mesgType)[33m;[39m
+     [90m 91 |[39m         [36mif[39m (mesgNum [33m===[39m undefined) {
+    [31m[1m>[22m[39m[90m 92 |[39m             console[33m.[39mwarn([32m`Unknown message type: ${mesgType}`[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 93 |[39m             [36mreturn[39m[33m;[39m
+     [90m 94 |[39m         }
+     [90m 95 |[39m[0m
+
+      at FitFileEncoder.warn [as writeMessage] (src/fitEncoder.ts:92:21)
+      at FitFileEncoder.writeMessage [as encodeWithModifications] (src/fitEncoder.ts:54:26)
+      at Object.encodeWithModifications (src/__tests__/fitEncoder.test.ts:175:21)
+
+  console.warn
+    Unknown message type: customMesgs
+
+    [0m [90m 90 |[39m         [36mconst[39m mesgNum [33m=[39m [36mthis[39m[33m.[39mgetMesgNum(mesgType)[33m;[39m
+     [90m 91 |[39m         [36mif[39m (mesgNum [33m===[39m undefined) {
+    [31m[1m>[22m[39m[90m 92 |[39m             console[33m.[39mwarn([32m`Unknown message type: ${mesgType}`[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 93 |[39m             [36mreturn[39m[33m;[39m
+     [90m 94 |[39m         }
+     [90m 95 |[39m[0m
+
+      at FitFileEncoder.warn [as writeMessage] (src/fitEncoder.ts:92:21)
+      at FitFileEncoder.writeMessage [as encodeWithModifications] (src/fitEncoder.ts:68:26)
+      at Object.encodeWithModifications (src/__tests__/fitEncoder.test.ts:196:21)
+
+PASS src/__tests__/fitParser.test.ts
+  FitFileParser
+    ÔêÜ should instantiate correctly (16 ms)
+    ÔêÜ should format duration correctly (4 ms)
+    ÔêÜ should organize GPS data correctly (8 ms)
+    ÔêÜ should extract heart rate data correctly (2 ms)
+    ÔêÜ should handle empty data gracefully (5 ms)
+    ÔêÜ should extract device info correctly (2 ms)
+    ÔêÜ should log warning when FIT parsing has errors (5 ms)
+
+  console.warn
+    Unknown message type: recordMesgs
+
+    [0m [90m 90 |[39m         [36mconst[39m mesgNum [33m=[39m [36mthis[39m[33m.[39mgetMesgNum(mesgType)[33m;[39m
+     [90m 91 |[39m         [36mif[39m (mesgNum [33m===[39m undefined) {
+    [31m[1m>[22m[39m[90m 92 |[39m             console[33m.[39mwarn([32m`Unknown message type: ${mesgType}`[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 93 |[39m             [36mreturn[39m[33m;[39m
+     [90m 94 |[39m         }
+     [90m 95 |[39m[0m
+
+      at FitFileEncoder.warn [as writeMessage] (src/fitEncoder.ts:92:21)
+      at FitFileEncoder.writeMessage [as encodeWithModifications] (src/fitEncoder.ts:54:26)
+      at encodeWithModifications (src/__tests__/fitEncoder.test.ts:305:25)
+      at Object.<anonymous> (node_modules/expect/build/index.js:1824:9)
+      at Object.throwingMatcher [as toThrow] (node_modules/expect/build/index.js:2235:93)
+      at Object.toThrow (src/__tests__/fitEncoder.test.ts:306:16)
+
+  console.warn
+    Unknown message type: deviceInfoMesgs
+
+    [0m [90m 90 |[39m         [36mconst[39m mesgNum [33m=[39m [36mthis[39m[33m.[39mgetMesgNum(mesgType)[33m;[39m
+     [90m 91 |[39m         [36mif[39m (mesgNum [33m===[39m undefined) {
+    [31m[1m>[22m[39m[90m 92 |[39m             console[33m.[39mwarn([32m`Unknown message type: ${mesgType}`[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 93 |[39m             [36mreturn[39m[33m;[39m
+     [90m 94 |[39m         }
+     [90m 95 |[39m[0m
+
+      at FitFileEncoder.warn [as writeMessage] (src/fitEncoder.ts:92:21)
+      at FitFileEncoder.writeMessage [as encodeWithModifications] (src/fitEncoder.ts:54:26)
+      at Object.encodeWithModifications (src/__tests__/fitEncoder.test.ts:334:21)
+
+  console.warn
+    Unknown message type: deviceInfoMesgs
+
+    [0m [90m 90 |[39m         [36mconst[39m mesgNum [33m=[39m [36mthis[39m[33m.[39mgetMesgNum(mesgType)[33m;[39m
+     [90m 91 |[39m         [36mif[39m (mesgNum [33m===[39m undefined) {
+    [31m[1m>[22m[39m[90m 92 |[39m             console[33m.[39mwarn([32m`Unknown message type: ${mesgType}`[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 93 |[39m             [36mreturn[39m[33m;[39m
+     [90m 94 |[39m         }
+     [90m 95 |[39m[0m
+
+      at FitFileEncoder.warn [as writeMessage] (src/fitEncoder.ts:92:21)
+      at FitFileEncoder.writeMessage [as encodeWithModifications] (src/fitEncoder.ts:54:26)
+      at Object.encodeWithModifications (src/__tests__/fitEncoder.test.ts:361:21)
+
+  console.warn
+    Unknown message type: deviceInfoMesgs
+
+    [0m [90m 90 |[39m         [36mconst[39m mesgNum [33m=[39m [36mthis[39m[33m.[39mgetMesgNum(mesgType)[33m;[39m
+     [90m 91 |[39m         [36mif[39m (mesgNum [33m===[39m undefined) {
+    [31m[1m>[22m[39m[90m 92 |[39m             console[33m.[39mwarn([32m`Unknown message type: ${mesgType}`[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 93 |[39m             [36mreturn[39m[33m;[39m
+     [90m 94 |[39m         }
+     [90m 95 |[39m[0m
+
+      at FitFileEncoder.warn [as writeMessage] (src/fitEncoder.ts:92:21)
+      at FitFileEncoder.writeMessage [as encodeWithModifications] (src/fitEncoder.ts:54:26)
+      at Object.encodeWithModifications (src/__tests__/fitEncoder.test.ts:389:21)
+
+  console.warn
+    Unknown message type: deviceInfoMesgs
+
+    [0m [90m 90 |[39m         [36mconst[39m mesgNum [33m=[39m [36mthis[39m[33m.[39mgetMesgNum(mesgType)[33m;[39m
+     [90m 91 |[39m         [36mif[39m (mesgNum [33m===[39m undefined) {
+    [31m[1m>[22m[39m[90m 92 |[39m             console[33m.[39mwarn([32m`Unknown message type: ${mesgType}`[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 93 |[39m             [36mreturn[39m[33m;[39m
+     [90m 94 |[39m         }
+     [90m 95 |[39m[0m
+
+      at FitFileEncoder.warn [as writeMessage] (src/fitEncoder.ts:92:21)
+      at FitFileEncoder.writeMessage [as encodeWithModifications] (src/fitEncoder.ts:54:26)
+      at Object.encodeWithModifications (src/__tests__/fitEncoder.test.ts:417:21)
+
+FAIL src/__tests__/fitEncoder.test.ts
+  FitFileEncoder
+    encodeWithModifications
+      ÔêÜ should encode FIT file with device modifications (113 ms)
+      ÔêÜ should handle encoding errors gracefully (84 ms)
+      ÔêÜ should handle empty message arrays (3 ms)
+      ÔêÜ should apply device modifications to deviceInfo messages (8 ms)
+      ÔêÜ should apply only specified device modifications (9 ms)
+      ÔêÜ should handle messages that are not in messageOrder (9 ms)
+    createDownload
+      ÔêÜ should create and trigger download with correct filename (22 ms)
+      ÔêÜ should handle filenames without .fit extension (4 ms)
+      ÔêÜ should handle .FIT extension (case insensitive) (5 ms)
+    writeMessage error handling
+      ├ù should throw error when onMesg fails (14 ms)
+    applyDeviceModifications coverage
+      ÔêÜ should apply manufacturer modification (11 ms)
+      ÔêÜ should apply product modification (14 ms)
+      ÔêÜ should apply serialNumber modification (7 ms)
+      ÔêÜ should apply softwareVersion modification (7 ms)
+
+  ÔùÅ FitFileEncoder ÔÇ║ writeMessage error handling ÔÇ║ should throw error when onMesg fails
+
+    expect(received).toThrow()
+
+    Received function did not throw
+
+      304 |             expect(() => {
+      305 |                 encoder.encodeWithModifications(rawMessages, {});
+    > 306 |             }).toThrow();
+          |                ^
+      307 |         });
+      308 |     });
+      309 |
+
+      at Object.toThrow (src/__tests__/fitEncoder.test.ts:306:16)
+
+PASS src/__tests__/components/ActivitySummary.test.tsx
+  ActivitySummary
+    ÔêÜ should render all metrics when provided (106 ms)
+    ÔêÜ should render without heart rate data (11 ms)
+    ÔêÜ should render with partial heart rate data (14 ms)
+    ÔêÜ should return null when no metrics available (4 ms)
+
+PASS src/__tests__/components/FileInfo.test.tsx
+  FileInfo
+    ÔêÜ should render file information (101 ms)
+    ÔêÜ should handle missing optional fields (15 ms)
+
+PASS src/__tests__/components/FileUpload.test.tsx
+  FileUpload
+    ÔêÜ should render upload area (79 ms)
+    ÔêÜ should disable button when loading (21 ms)
+    ÔêÜ should handle button click to trigger file input (23 ms)
+    ÔêÜ should handle drop event with valid file (11 ms)
+    ÔêÜ should not call onFileSelect when drop has no files (9 ms)
+    ÔêÜ should prevent default on drag over (6 ms)
+    ÔêÜ should handle drop event correctly (4 ms)
+    ÔêÜ should handle drop with valid file (6 ms)
+    ÔêÜ should alert for invalid file extension on drop (9 ms)
+    ÔêÜ should alert for file too large on drop (52 ms)
+    ÔêÜ should alert for invalid file extension on drop (8 ms)
+    ÔêÜ should alert for file too large on drop (50 ms)
+
+PASS src/__tests__/components/DataPreview.test.tsx
+  DataPreview
+    ÔêÜ should render success message with GPS and HR data (145 ms)
+    ÔêÜ should render GPS data table (32 ms)
+    ÔêÜ should render heart rate data table (47 ms)
+    ÔêÜ should handle GPS data without elevation (20 ms)
+    ÔêÜ should handle GPS data without timestamp (15 ms)
+    ÔêÜ should not render GPS section when no GPS data (11 ms)
+    ÔêÜ should not render HR section when no HR data (8 ms)
+    ÔêÜ should limit GPS data to first 3 points (13 ms)
+
+PASS src/__tests__/components/FieldEditor.test.tsx
+  FieldEditor
+    Rendering
+      ÔêÜ should render the form with all fields (106 ms)
+      ÔêÜ should display current values in hints (25 ms)
+      ÔêÜ should pre-fill inputs with current values (27 ms)
+      ÔêÜ should handle missing device info gracefully (15 ms)
+    User Interactions
+      ÔêÜ should update manufacturer field on input (29 ms)
+      ÔêÜ should update product field on input (20 ms)
+      ÔêÜ should update serial number field on input (17 ms)
+      ÔêÜ should update software version field on input (20 ms)
+      ÔêÜ should call onCancel when Cancel button is clicked (28 ms)
+    Form Submission
+      ÔêÜ should disable submit button when no changes are made (8 ms)
+      ÔêÜ should enable submit button when changes are made (16 ms)
+      ÔêÜ should call onModify with only changed fields (17 ms)
+      ÔêÜ should call onModify with multiple changed fields (22 ms)
+      ÔêÜ should handle numeric field validation (14 ms)
+      ÔêÜ should not include unchanged fields in modifications (15 ms)
+      ÔêÜ should handle empty modifications object when no valid changes (11 ms)
+    Edge Cases
+      ÔêÜ should handle device with null values (7 ms)
+      ÔêÜ should render buttons with correct classes (11 ms)
+
+FAIL src/__tests__/components/MapView.test.tsx
+  MapView
+    Rendering with GPS data
+      ÔêÜ should render map view with GPS track (116 ms)
+      ÔêÜ should render map container (9 ms)
+      ÔêÜ should render legend with start and end markers (9 ms)
+    Rendering without GPS data
+      ÔêÜ should not render anything when gpsData is empty array (5 ms)
+      ÔêÜ should not render map view when no GPS data (6 ms)
+      ÔêÜ should not render map container when no GPS data (4 ms)
+      ÔêÜ should not render legend when no GPS data (5 ms)
+      ÔêÜ should not throw error with empty array (4 ms)
+    GPS data with null coordinates
+      ÔêÜ should filter out GPS points with null lat/lng gracefully (11 ms)
+      ÔêÜ should not render if GPS array has only invalid coordinates (28 ms)
+    Coordinate conversion
+      ÔêÜ should handle coordinates in semicircles format (large numbers) (19 ms)
+      ÔêÜ should handle coordinates already in degrees format (11 ms)
+    Single GPS point
+      ÔêÜ should render map with single GPS point (4 ms)
+    Map layer management
+      ├ù should clear existing layers when updating GPS data (27 ms)
+    Edge cases with coordinate filtering
+      ├ù should handle case where all coords are converted but result in empty array (6 ms)
+      ├ù should handle negative semicircle coordinates (29 ms)
+
+  ÔùÅ MapView ÔÇ║ Map layer management ÔÇ║ should clear existing layers when updating GPS data
+
+    TypeError: Right-hand side of 'instanceof' is not an object
+
+      51 |         // Clear existing layers (except tile layer)
+      52 |         map.eachLayer((layer) => {
+    > 53 |             if (layer instanceof L.Polyline || layer instanceof L.Marker) {
+         |                      ^
+      54 |                 map.removeLayer(layer);
+      55 |             }
+      56 |         });
+
+      at src/components/MapView.tsx:53:22
+      at Object.callback (src/__tests__/components/MapView.test.tsx:249:21)
+      at eachLayer (src/components/MapView.tsx:52:13)
+      at Object.react_stack_bottom_frame (node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:18432:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:17923:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:590:34)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (src/__tests__/components/MapView.test.tsx:254:40)
+
+  ÔùÅ MapView ÔÇ║ Edge cases with coordinate filtering ÔÇ║ should handle case where all coords are converted but result in empty array
+
+    TypeError: Right-hand side of 'instanceof' is not an object
+
+      51 |         // Clear existing layers (except tile layer)
+      52 |         map.eachLayer((layer) => {
+    > 53 |             if (layer instanceof L.Polyline || layer instanceof L.Marker) {
+         |                      ^
+      54 |                 map.removeLayer(layer);
+      55 |             }
+      56 |         });
+
+      at src/components/MapView.tsx:53:22
+      at Object.callback (src/__tests__/components/MapView.test.tsx:249:21)
+      at eachLayer (src/components/MapView.tsx:52:13)
+      at Object.react_stack_bottom_frame (node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:18432:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:17923:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:590:34)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (src/__tests__/components/MapView.test.tsx:281:41)
+
+  ÔùÅ MapView ÔÇ║ Edge cases with coordinate filtering ÔÇ║ should handle negative semicircle coordinates
+
+    expect(received).not.toThrow()
+
+    Error name:    "TypeError"
+    Error message: "Right-hand side of 'instanceof' is not an object"
+
+          51 |         // Clear existing layers (except tile layer)
+          52 |         map.eachLayer((layer) => {
+        > 53 |             if (layer instanceof L.Polyline || layer instanceof L.Marker) {
+             |                      ^
+          54 |                 map.removeLayer(layer);
+          55 |             }
+          56 |         });
+
+      at src/components/MapView.tsx:53:22
+      at Object.callback (src/__tests__/components/MapView.test.tsx:249:21)
+      at eachLayer (src/components/MapView.tsx:52:13)
+      at Object.react_stack_bottom_frame (node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:18432:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:17923:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:590:34)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at src/__tests__/components/MapView.test.tsx:299:23
+      at Object.<anonymous> (node_modules/expect/build/index.js:1824:9)
+      at Object.throwingMatcher [as toThrow] (node_modules/expect/build/index.js:2235:93)
+      at Object.toThrow (src/__tests__/components/MapView.test.tsx:300:20)
+      at Object.toThrow (src/__tests__/components/MapView.test.tsx:300:20)
+
+FAIL src/__tests__/App.test.tsx (5.008 s)
+  App
+    ÔêÜ should render file upload component (107 ms)
+    ÔêÜ should show error for invalid file extension (22 ms)
+    ÔêÜ should show error for file too large (178 ms)
+    ÔêÜ should parse valid FIT file and display results (177 ms)
+    ÔêÜ should show loading state while parsing (56 ms)
+    ÔêÜ should handle parsing errors (65 ms)
+    ÔêÜ should allow uploading another file after successful parse (87 ms)
+    ÔêÜ should handle drag and drop file upload (4 ms)
+    ÔêÜ should disable input while loading (63 ms)
+    ÔêÜ should open FieldEditor when modify button is clicked (166 ms)
+    ÔêÜ should close FieldEditor when cancel is clicked (200 ms)
+    ├ù should handle device modification and download (297 ms)
+    ÔêÜ should show error when modifying without fit data (164 ms)
+    ├ù should handle encoding errors during modification (310 ms)
+
+  ÔùÅ App ÔÇ║ should handle device modification and download
+
+    TestingLibraryElementError: Unable to find an accessible element with the role "button" and name `/apply & download/i`
+
+    Here are the accessible roles:
+
+      banner:
+
+      Name "":
+      <header />
+
+      --------------------------------------------------
+      heading:
+
+      Name "FIT File Reader":
+      <h1 />
+
+      Name "­ƒôü Drop a .FIT file here or click to browse":
+      <h2 />
+
+      Name "Edit Device Information":
+      <h3 />
+
+      --------------------------------------------------
+      paragraph:
+
+      Name "":
+      <p />
+
+      Name "":
+      <p />
+
+      --------------------------------------------------
+      button:
+
+      Name "Browse Files":
+      <button />
+
+      Name "Cancel":
+      <button
+        class="button-secondary"
+        type="button"
+      />
+
+      Name "Apply Changes & Download":
+      <button
+        class="button-primary"
+        type="submit"
+      />
+
+      --------------------------------------------------
+      textbox:
+
+      Name "Manufacturer:":
+      <input
+        id="manufacturer"
+        placeholder="e.g., garmin, wahoo, etc."
+        type="text"
+        value="123"
+      />
+
+      Name "Product:":
+      <input
+        id="product"
+        placeholder="e.g., edge1030, fenix7, etc."
+        type="text"
+        value="Edge 530"
+      />
+
+      --------------------------------------------------
+      spinbutton:
+
+      Name "Serial Number:":
+      <input
+        id="serialNumber"
+        placeholder="e.g., 123456789"
+        type="number"
+        value=""
+      />
+
+      Name "Software Version:":
+      <input
+        id="softwareVersion"
+        placeholder="e.g., 5.20"
+        step="0.01"
+        type="number"
+        value=""
+      />
+
+      --------------------------------------------------
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div>
+        <div
+          class="container"
+        >
+          <header>
+            <h1>
+              FIT File Reader
+            </h1>
+            <p>
+              Parse and analyze Garmin FIT files
+            </p>
+          </header>
+          <div
+            class="upload-area"
+          >
+            <input
+              accept=".fit"
+              id="fileInput"
+              style="display: none;"
+              type="file"
+            />
+            <label
+              for="fileInput"
+              style="cursor: pointer;"
+            >
+              <h2>
+                ­ƒôü Drop a .FIT file here or click to browse
+              </h2>
+              <p>
+                Click or drag and drop your Garmin FIT file here
+              </p>
+              <button>
+                Browse Files
+              </button>
+            </label>
+          </div>
+          <div
+            class="editor-section"
+          >
+            <div
+              class="field-editor"
+            >
+              <h3>
+                Edit Device Information
+              </h3>
+              <form>
+                <div
+                  class="form-group"
+                >
+                  <label
+                    for="manufacturer"
+                  >
+                    Manufacturer:
+                    <input
+                      id="manufacturer"
+                      placeholder="e.g., garmin, wahoo, etc."
+                      type="text"
+                      value="123"
+                    />
+                  </label>
+                  <small
+                    class="form-hint"
+                  >
+                    Current: 
+                    Garmin
+                  </small>
+                </div>
+                <div
+                  class="form-group"
+                >
+                  <label
+                    for="product"
+                  >
+                    Product:
+                    <input
+                      id="product"
+                      placeholder="e.g., edge1030, fenix7, etc."
+                      type="text"
+                      value="Edge 530"
+                    />
+                  </label>
+                  <small
+                    class="form-hint"
+                  >
+                    Current: 
+                    Edge 530
+                  </small>
+                </div>
+                <div
+                  class="form-group"
+                >
+                  <label
+                    for="serialNumber"
+                  >
+                    Serial Number:
+                    <input
+                      id="serialNumber"
+                      placeholder="e.g., 123456789"
+                      type="number"
+                      value=""
+                    />
+                  </label>
+                  <small
+                    class="form-hint"
+                  >
+                    Current: 
+                    N/A
+                  </small>
+                </div>
+                <div
+                  class="form-group"
+                >
+                  <label
+                    for="softwareVersion"
+                  >
+                    Software Version:
+                    <input
+                      id="softwareVersion"
+                      placeholder="e.g., 5.20"
+                      step="0.01"
+                      type="number"
+                      value=""
+                    />
+                  </label>
+                  <small
+                    class="form-hint"
+                  >
+                    Current: 
+                    N/A
+                  </small>
+                </div>
+                <div
+                  class="form-actions"
+                >
+                  <button
+                    class="button-secondary"
+                    type="button"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    class="button-primary"
+                    type="submit"
+                  >
+                    Apply Changes & Download
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+
+      556 |
+      557 |         // Submit
+    > 558 |         const submitButton = screen.getByRole("button", {
+          |                                     ^
+      559 |             name: /apply & download/i,
+      560 |         });
+      561 |         await user.click(submitButton);
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+      at getByRole (src/__tests__/App.test.tsx:558:37)
+      at Generator.call (src/__tests__/App.test.tsx:2:1)
+      at Generator._invoke [as next] (src/__tests__/App.test.tsx:2:1)
+      at asyncGeneratorStep (src/__tests__/App.test.tsx:2:1)
+      at asyncGeneratorStep (src/__tests__/App.test.tsx:2:1)
+
+  ÔùÅ App ÔÇ║ should handle encoding errors during modification
+
+    TestingLibraryElementError: Unable to find an accessible element with the role "button" and name `/apply & download/i`
+
+    Here are the accessible roles:
+
+      banner:
+
+      Name "":
+      <header />
+
+      --------------------------------------------------
+      heading:
+
+      Name "FIT File Reader":
+      <h1 />
+
+      Name "­ƒôü Drop a .FIT file here or click to browse":
+      <h2 />
+
+      Name "Edit Device Information":
+      <h3 />
+
+      --------------------------------------------------
+      paragraph:
+
+      Name "":
+      <p />
+
+      Name "":
+      <p />
+
+      --------------------------------------------------
+      button:
+
+      Name "Browse Files":
+      <button />
+
+      Name "Cancel":
+      <button
+        class="button-secondary"
+        type="button"
+      />
+
+      Name "Apply Changes & Download":
+      <button
+        class="button-primary"
+        type="submit"
+      />
+
+      --------------------------------------------------
+      textbox:
+
+      Name "Manufacturer:":
+      <input
+        id="manufacturer"
+        placeholder="e.g., garmin, wahoo, etc."
+        type="text"
+        value="123"
+      />
+
+      Name "Product:":
+      <input
+        id="product"
+        placeholder="e.g., edge1030, fenix7, etc."
+        type="text"
+        value="Edge 530"
+      />
+
+      --------------------------------------------------
+      spinbutton:
+
+      Name "Serial Number:":
+      <input
+        id="serialNumber"
+        placeholder="e.g., 123456789"
+        type="number"
+        value=""
+      />
+
+      Name "Software Version:":
+      <input
+        id="softwareVersion"
+        placeholder="e.g., 5.20"
+        step="0.01"
+        type="number"
+        value=""
+      />
+
+      --------------------------------------------------
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div>
+        <div
+          class="container"
+        >
+          <header>
+            <h1>
+              FIT File Reader
+            </h1>
+            <p>
+              Parse and analyze Garmin FIT files
+            </p>
+          </header>
+          <div
+            class="upload-area"
+          >
+            <input
+              accept=".fit"
+              id="fileInput"
+              style="display: none;"
+              type="file"
+            />
+            <label
+              for="fileInput"
+              style="cursor: pointer;"
+            >
+              <h2>
+                ­ƒôü Drop a .FIT file here or click to browse
+              </h2>
+              <p>
+                Click or drag and drop your Garmin FIT file here
+              </p>
+              <button>
+                Browse Files
+              </button>
+            </label>
+          </div>
+          <div
+            class="editor-section"
+          >
+            <div
+              class="field-editor"
+            >
+              <h3>
+                Edit Device Information
+              </h3>
+              <form>
+                <div
+                  class="form-group"
+                >
+                  <label
+                    for="manufacturer"
+                  >
+                    Manufacturer:
+                    <input
+                      id="manufacturer"
+                      placeholder="e.g., garmin, wahoo, etc."
+                      type="text"
+                      value="123"
+                    />
+                  </label>
+                  <small
+                    class="form-hint"
+                  >
+                    Current: 
+                    Garmin
+                  </small>
+                </div>
+                <div
+                  class="form-group"
+                >
+                  <label
+                    for="product"
+                  >
+                    Product:
+                    <input
+                      id="product"
+                      placeholder="e.g., edge1030, fenix7, etc."
+                      type="text"
+                      value="Edge 530"
+                    />
+                  </label>
+                  <small
+                    class="form-hint"
+                  >
+                    Current: 
+                    Edge 530
+                  </small>
+                </div>
+                <div
+                  class="form-group"
+                >
+                  <label
+                    for="serialNumber"
+                  >
+                    Serial Number:
+                    <input
+                      id="serialNumber"
+                      placeholder="e.g., 123456789"
+                      type="number"
+                      value=""
+                    />
+                  </label>
+                  <small
+                    class="form-hint"
+                  >
+                    Current: 
+                    N/A
+                  </small>
+                </div>
+                <div
+                  class="form-group"
+                >
+                  <label
+                    for="softwareVersion"
+                  >
+                    Software Version:
+                    <input
+                      id="softwareVersion"
+                      placeholder="e.g., 5.20"
+                      step="0.01"
+                      type="number"
+                      value=""
+                    />
+                  </label>
+                  <small
+                    class="form-hint"
+                  >
+                    Current: 
+                    N/A
+                  </small>
+                </div>
+                <div
+                  class="form-actions"
+                >
+                  <button
+                    class="button-secondary"
+                    type="button"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    class="button-primary"
+                    type="submit"
+                  >
+                    Apply Changes & Download
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+
+      674 |         await user.type(manufacturerInput, "123");
+      675 |
+    > 676 |         const submitButton = screen.getByRole("button", {
+          |                                     ^
+      677 |             name: /apply & download/i,
+      678 |         });
+      679 |         await user.click(submitButton);
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+      at getByRole (src/__tests__/App.test.tsx:676:37)
+      at Generator.call (src/__tests__/App.test.tsx:2:1)
+      at Generator._invoke [as next] (src/__tests__/App.test.tsx:2:1)
+      at asyncGeneratorStep (src/__tests__/App.test.tsx:2:1)
+      at asyncGeneratorStep (src/__tests__/App.test.tsx:2:1)
+
+Test Suites: 4 failed, 6 passed, 10 total
+Tests:       8 failed, 89 passed, 97 total
+Snapshots:   0 total
+Time:        7.987 s
+Ran all test suites.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.

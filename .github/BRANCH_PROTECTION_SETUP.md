@@ -40,7 +40,7 @@ Check the following boxes:
      - `Check Formatting`
      - `Run Tests`
      - `Build Application`
-   
+
    > **Note**: These status check names must match exactly with the job names in `.github/workflows/pr-checks.yml`
 
 ✅ **Require conversation resolution before merging** (optional, but recommended)
@@ -86,13 +86,13 @@ The status check names in branch protection **must exactly match** the `name:` f
 jobs:
   lint:
     name: Lint Code        # ← Must match exactly
-  
+
   format:
     name: Check Formatting  # ← Must match exactly
-  
+
   test:
     name: Run Tests        # ← Must match exactly
-  
+
   build:
     name: Build Application # ← Must match exactly
 ```

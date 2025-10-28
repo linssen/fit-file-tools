@@ -36,7 +36,7 @@ describe("FitFileEncoder", () => {
     describe("encodeWithModifications", () => {
         it("should encode FIT file with device modifications", () => {
             const mockEncoder = {
-                writeMesg: jest.fn(),
+                onMesg: jest.fn(),
                 close: jest.fn(() => new Uint8Array([1, 2, 3, 4])),
             };
 
@@ -87,7 +87,7 @@ describe("FitFileEncoder", () => {
 
         it("should handle encoding errors gracefully", () => {
             const mockEncoder = {
-                writeMesg: jest.fn(),
+                onMesg: jest.fn(),
                 close: jest.fn(() => {
                     throw new Error("Encoding failed");
                 }),
@@ -106,7 +106,7 @@ describe("FitFileEncoder", () => {
 
         it("should handle empty message arrays", () => {
             const mockEncoder = {
-                writeMesg: jest.fn(),
+                onMesg: jest.fn(),
                 close: jest.fn(() => new Uint8Array()),
             };
 
@@ -125,7 +125,7 @@ describe("FitFileEncoder", () => {
 
         it("should apply device modifications to deviceInfo messages", () => {
             const mockEncoder = {
-                writeMesg: jest.fn(),
+                onMesg: jest.fn(),
                 close: jest.fn(() => new Uint8Array()),
             };
 
@@ -161,7 +161,7 @@ describe("FitFileEncoder", () => {
 
         it("should apply only specified device modifications", () => {
             const mockEncoder = {
-                writeMesg: jest.fn(),
+                onMesg: jest.fn(),
                 close: jest.fn(() => new Uint8Array()),
             };
 
@@ -195,7 +195,7 @@ describe("FitFileEncoder", () => {
 
         it("should handle messages that are not in messageOrder", () => {
             const mockEncoder = {
-                writeMesg: jest.fn(),
+                onMesg: jest.fn(),
                 close: jest.fn(() => new Uint8Array()),
             };
 

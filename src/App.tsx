@@ -123,8 +123,8 @@ export default function App() {
                 <div className="editor-section">
                     <FieldEditor
                         currentDevice={{
-                            manufacturer: fitData.deviceInfo.manufacturer,
-                            product: fitData.deviceInfo.product,
+                            manufacturer: fitData.deviceInfo.manufacturerId,
+                            product: fitData.deviceInfo.productId,
                             serialNumber: fitData.deviceInfo.serialNumber,
                             softwareVersion: fitData.deviceInfo.softwareVersion,
                         }}

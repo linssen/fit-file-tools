@@ -1,10 +1,11 @@
 import { useState } from "react";
 import type { DeviceModifications } from "../fitEncoder";
+import { MANUFACTURERS, getManufacturerName } from "../manufacturerMap";
 
 interface FieldEditorProps {
     currentDevice?: {
-        manufacturer?: string;
-        product?: string;
+        manufacturer?: number;
+        product?: number;
         serialNumber?: number | null;
         softwareVersion?: number | null;
     };
@@ -18,9 +19,11 @@ export default function FieldEditor({
     onCancel,
 }: FieldEditorProps) {
     const [manufacturer, setManufacturer] = useState(
-        currentDevice?.manufacturer || ""
+        currentDevice?.manufacturer?.toString() || ""
     );
-    const [product, setProduct] = useState(currentDevice?.product || "");
+    const [product, setProduct] = useState(
+        currentDevice?.product?.toString() || ""
+    );
     const [serialNumber, setSerialNumber] = useState(
         currentDevice?.serialNumber?.toString() || ""
     );
@@ -34,11 +37,14 @@ export default function FieldEditor({
         const modifications: DeviceModifications = {};
 
         // Only include fields that have been changed
-        if (manufacturer && manufacturer !== currentDevice?.manufacturer) {
-            modifications.manufacturer = manufacturer;
+        if (
+            manufacturer &&
+            manufacturer !== currentDevice?.manufacturer?.toString()
+        ) {
+            modifications.manufacturer = parseInt(manufacturer, 10);
         }
-        if (product && product !== currentDevice?.product) {
-            modifications.product = product;
+        if (product && product !== currentDevice?.product?.toString()) {
+            modifications.product = parseInt(product, 10);
         }
         if (serialNumber) {
             const num = parseInt(serialNumber, 10);
@@ -58,8 +64,8 @@ export default function FieldEditor({
 
     const hasChanges = () => {
         return (
-            manufacturer !== (currentDevice?.manufacturer || "") ||
-            product !== (currentDevice?.product || "") ||
+            manufacturer !== (currentDevice?.manufacturer?.toString() || "") ||
+            product !== (currentDevice?.product?.toString() || "") ||
             serialNumber !== (currentDevice?.serialNumber?.toString() || "") ||
             softwareVersion !==
                 (currentDevice?.softwareVersion?.toString() || "")
@@ -73,16 +79,24 @@ export default function FieldEditor({
                 <div className="form-group">
                     <label htmlFor="manufacturer">
                         Manufacturer:
-                        <input
-                            type="text"
+                        <select
                             id="manufacturer"
                             value={manufacturer}
                             onChange={(e) => setManufacturer(e.target.value)}
-                            placeholder="e.g., garmin, wahoo, etc."
-                        />
+                        >
+                            <option value="">-- Select Manufacturer --</option>
+                            {MANUFACTURERS.map((m) => (
+                                <option key={m.id} value={m.id}>
+                                    {m.name}
+                                </option>
+                            ))}
+                        </select>
                     </label>
                     <small className="form-hint">
-                        Current: {currentDevice?.manufacturer || "N/A"}
+                        Current:{" "}
+                        {currentDevice?.manufacturer
+                            ? getManufacturerName(currentDevice.manufacturer)
+                            : "N/A"}
                     </small>
                 </div>
 
@@ -90,11 +104,11 @@ export default function FieldEditor({
                     <label htmlFor="product">
                         Product:
                         <input
-                            type="text"
+                            type="number"
                             id="product"
                             value={product}
                             onChange={(e) => setProduct(e.target.value)}
-                            placeholder="e.g., edge1030, fenix7, etc."
+                            placeholder="e.g., 1735 for Edge 820"
                         />
                     </label>
                     <small className="form-hint">
