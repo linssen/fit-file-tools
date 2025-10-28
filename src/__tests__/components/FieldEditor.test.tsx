@@ -12,7 +12,7 @@ describe("FieldEditor", () => {
 
     const defaultDevice = {
         manufacturer: 1, // Garmin
-        product: 1735, // Edge 820
+        product: 2713, // Edge 1030
         serialNumber: 123456789,
         softwareVersion: 5.2,
     };
@@ -69,7 +69,7 @@ describe("FieldEditor", () => {
 
             expect(screen.getByLabelText(/Manufacturer:/)).toHaveValue("1");
             // Product is now a select dropdown when manufacturer is set
-            expect(screen.getByLabelText(/Product:/)).toHaveValue("1735");
+            expect(screen.getByLabelText(/Product:/)).toHaveValue("2713");
             expect(screen.getByLabelText(/Serial Number:/)).toHaveValue(
                 123456789
             );
