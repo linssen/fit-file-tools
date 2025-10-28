@@ -114,58 +114,40 @@ const GARMIN_PRODUCTS: Product[] = [
     { id: 3349, name: "Enduro 2", manufacturerId: 1 },
 ];
 
-// Wahoo Fitness Products (manufacturer ID: 32)
+// Wahoo Products (manufacturer ID: 32)
 const WAHOO_PRODUCTS: Product[] = [
-    { id: 1, name: "Kickr", manufacturerId: 32 },
-    { id: 2, name: "ELEMNT", manufacturerId: 32 },
-    { id: 3, name: "ELEMNT BOLT", manufacturerId: 32 },
-    { id: 4, name: "ELEMNT ROAM", manufacturerId: 32 },
-    { id: 5, name: "Tickr", manufacturerId: 32 },
-    { id: 6, name: "Kickr Core", manufacturerId: 32 },
-    { id: 7, name: "Kickr Bike", manufacturerId: 32 },
-    { id: 8, name: "ELEMNT BOLT v2", manufacturerId: 32 },
-    { id: 9, name: "ELEMNT ROAM v2", manufacturerId: 32 },
-    { id: 10, name: "Kickr Move", manufacturerId: 32 },
+    { id: 10, name: "Kickr", manufacturerId: 32 },
+    { id: 11, name: "Kickr Snap", manufacturerId: 32 },
+    { id: 12, name: "Kickr Core", manufacturerId: 32 },
+    { id: 15, name: "ELEMNT", manufacturerId: 32 },
+    { id: 16, name: "ELEMNT BOLT", manufacturerId: 32 },
+    { id: 19, name: "ELEMNT ROAM", manufacturerId: 32 },
+    { id: 20, name: "Tickr", manufacturerId: 32 },
+    { id: 21, name: "Tickr X", manufacturerId: 32 },
+    { id: 30, name: "Kickr Bike", manufacturerId: 32 },
+    { id: 39, name: "ELEMNT BOLT v2", manufacturerId: 32 },
+    { id: 40, name: "Kickr Rollr", manufacturerId: 32 },
+    { id: 47, name: "ELEMNT ROAM v2", manufacturerId: 32 },
+    { id: 48, name: "Kickr Move", manufacturerId: 32 },
+    { id: 49, name: "Kickr Core 2", manufacturerId: 32 },
 ];
 
 // Polar Products (manufacturer ID: 5)
+// Note: Polar product IDs need verification from actual devices
 const POLAR_PRODUCTS: Product[] = [
-    { id: 1, name: "V650", manufacturerId: 5 },
-    { id: 2, name: "M450", manufacturerId: 5 },
-    { id: 3, name: "M460", manufacturerId: 5 },
-    { id: 4, name: "V800", manufacturerId: 5 },
-    { id: 5, name: "Vantage V", manufacturerId: 5 },
-    { id: 6, name: "Vantage M", manufacturerId: 5 },
-    { id: 7, name: "Grit X", manufacturerId: 5 },
-    { id: 8, name: "Vantage V2", manufacturerId: 5 },
-    { id: 9, name: "Pacer", manufacturerId: 5 },
-    { id: 10, name: "Pacer Pro", manufacturerId: 5 },
+    // Add verified Polar product IDs here
 ];
 
 // Suunto Products (manufacturer ID: 23)
+// Note: Suunto product IDs need verification from actual devices
 const SUUNTO_PRODUCTS: Product[] = [
-    { id: 1, name: "Ambit", manufacturerId: 23 },
-    { id: 2, name: "Ambit2", manufacturerId: 23 },
-    { id: 3, name: "Ambit3", manufacturerId: 23 },
-    { id: 4, name: "Traverse", manufacturerId: 23 },
-    { id: 5, name: "Spartan", manufacturerId: 23 },
-    { id: 6, name: "9 Baro", manufacturerId: 23 },
-    { id: 7, name: "7", manufacturerId: 23 },
-    { id: 8, name: "5", manufacturerId: 23 },
-    { id: 9, name: "3", manufacturerId: 23 },
-    { id: 10, name: "9 Peak", manufacturerId: 23 },
+    // Add verified Suunto product IDs here
 ];
 
 // Coros Products (manufacturer ID: 294)
+// Note: Coros product IDs need verification from actual devices
 const COROS_PRODUCTS: Product[] = [
-    { id: 1, name: "Apex", manufacturerId: 294 },
-    { id: 2, name: "Apex Pro", manufacturerId: 294 },
-    { id: 3, name: "Pace 2", manufacturerId: 294 },
-    { id: 4, name: "Vertix", manufacturerId: 294 },
-    { id: 5, name: "Vertix 2", manufacturerId: 294 },
-    { id: 6, name: "Apex 2", manufacturerId: 294 },
-    { id: 7, name: "Apex 2 Pro", manufacturerId: 294 },
-    { id: 8, name: "Pace 3", manufacturerId: 294 },
+    // Add verified Coros product IDs here
 ];
 
 // Combine all products

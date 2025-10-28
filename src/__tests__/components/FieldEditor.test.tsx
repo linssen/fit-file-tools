@@ -237,9 +237,8 @@ describe("FieldEditor", () => {
                 target: { value: "32" }, // Wahoo Fitness
             });
             // After manufacturer changes, product field should be available
-            // Wahoo has products with IDs 1-10 in our productMap
             fireEvent.change(screen.getByLabelText(/Product:/), {
-                target: { value: "3" }, // ELEMNT BOLT for Wahoo
+                target: { value: "16" }, // ELEMNT BOLT for Wahoo
             });
             fireEvent.change(screen.getByLabelText(/Serial Number:/), {
                 target: { value: "999999" },
@@ -256,7 +255,7 @@ describe("FieldEditor", () => {
 
             const expectedModifications: DeviceModifications = {
                 manufacturer: 32,
-                product: 3, // ELEMNT BOLT for Wahoo
+                product: 16, // ELEMNT BOLT for Wahoo
                 serialNumber: 999999,
             };
 
