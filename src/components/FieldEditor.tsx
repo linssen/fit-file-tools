@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import type { DeviceModifications } from "../fitEncoder";
 import { MANUFACTURERS, getManufacturerName } from "../manufacturerMap";
+import { getProductsForManufacturer, getProductName } from "../productMap";
 
 interface FieldEditorProps {
     currentDevice?: {
@@ -30,6 +31,31 @@ export default function FieldEditor({
     const [softwareVersion, setSoftwareVersion] = useState(
         currentDevice?.softwareVersion?.toString() || ""
     );
+
+    // Get products for the selected manufacturer
+    const availableProducts = useMemo(() => {
+        if (!manufacturer) return [];
+        return getProductsForManufacturer(parseInt(manufacturer, 10));
+    }, [manufacturer]);
+
+    // When manufacturer changes, clear product if it's not valid for the new manufacturer
+    const handleManufacturerChange = (newManufacturer: string) => {
+        setManufacturer(newManufacturer);
+
+        // If we have a product selected, check if it's valid for this manufacturer
+        if (product && newManufacturer) {
+            const manufacturerId = parseInt(newManufacturer, 10);
+            const productsForMfr = getProductsForManufacturer(manufacturerId);
+            const isProductValid = productsForMfr.some(
+                (p) => p.id.toString() === product
+            );
+
+            // Clear product if it's not valid for the new manufacturer
+            if (!isProductValid) {
+                setProduct("");
+            }
+        }
+    };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -82,7 +108,9 @@ export default function FieldEditor({
                         <select
                             id="manufacturer"
                             value={manufacturer}
-                            onChange={(e) => setManufacturer(e.target.value)}
+                            onChange={(e) =>
+                                handleManufacturerChange(e.target.value)
+                            }
                         >
                             <option value="">-- Select Manufacturer --</option>
                             {MANUFACTURERS.map((m) => (
@@ -103,16 +131,42 @@ export default function FieldEditor({
                 <div className="form-group">
                     <label htmlFor="product">
                         Product:
-                        <input
-                            type="number"
-                            id="product"
-                            value={product}
-                            onChange={(e) => setProduct(e.target.value)}
-                            placeholder="e.g., 1735 for Edge 820"
-                        />
+                        {manufacturer && availableProducts.length > 0 ? (
+                            <select
+                                id="product"
+                                value={product}
+                                onChange={(e) => setProduct(e.target.value)}
+                            >
+                                <option value="">-- Select Product --</option>
+                                {availableProducts.map((p) => (
+                                    <option key={p.id} value={p.id}>
+                                        {p.name}
+                                    </option>
+                                ))}
+                            </select>
+                        ) : (
+                            <input
+                                type="number"
+                                id="product"
+                                value={product}
+                                onChange={(e) => setProduct(e.target.value)}
+                                placeholder={
+                                    manufacturer
+                                        ? "No products available"
+                                        : "Select manufacturer first"
+                                }
+                                disabled={!manufacturer}
+                            />
+                        )}
                     </label>
                     <small className="form-hint">
-                        Current: {currentDevice?.product || "N/A"}
+                        Current:{" "}
+                        {currentDevice?.product && currentDevice?.manufacturer
+                            ? getProductName(
+                                  currentDevice.product,
+                                  currentDevice.manufacturer
+                              )
+                            : currentDevice?.product || "N/A"}
                     </small>
                 </div>
 

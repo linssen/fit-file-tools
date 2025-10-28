@@ -52,7 +52,8 @@ describe("FieldEditor", () => {
             );
 
             expect(screen.getByText(/Current: Garmin/)).toBeInTheDocument();
-            expect(screen.getByText(/Current: 1735/)).toBeInTheDocument();
+            // Product now shows product name instead of just ID
+            expect(screen.getByText(/Current: Edge 1030/)).toBeInTheDocument();
             expect(screen.getByText(/Current: 123456789/)).toBeInTheDocument();
             expect(screen.getByText(/Current: 5.2/)).toBeInTheDocument();
         });
@@ -67,7 +68,8 @@ describe("FieldEditor", () => {
             );
 
             expect(screen.getByLabelText(/Manufacturer:/)).toHaveValue("1");
-            expect(screen.getByLabelText(/Product:/)).toHaveValue(1735);
+            // Product is now a select dropdown when manufacturer is set
+            expect(screen.getByLabelText(/Product:/)).toHaveValue("1735");
             expect(screen.getByLabelText(/Serial Number:/)).toHaveValue(
                 123456789
             );
@@ -110,9 +112,10 @@ describe("FieldEditor", () => {
             );
 
             const input = screen.getByLabelText(/Product:/);
-            fireEvent.change(input, { target: { value: "2530" } });
+            // Product is now a select dropdown, so value is a string
+            fireEvent.change(input, { target: { value: "2238" } }); // Venu 2
 
-            expect(input).toHaveValue(2530);
+            expect(input).toHaveValue("2238");
         });
 
         it("should update serial number field on input", () => {
@@ -233,8 +236,10 @@ describe("FieldEditor", () => {
             fireEvent.change(screen.getByLabelText(/Manufacturer:/), {
                 target: { value: "32" }, // Wahoo Fitness
             });
+            // After manufacturer changes, product field should be available
+            // Wahoo has products with IDs 1-10 in our productMap
             fireEvent.change(screen.getByLabelText(/Product:/), {
-                target: { value: "2530" },
+                target: { value: "3" }, // ELEMNT BOLT for Wahoo
             });
             fireEvent.change(screen.getByLabelText(/Serial Number:/), {
                 target: { value: "999999" },
@@ -251,7 +256,7 @@ describe("FieldEditor", () => {
 
             const expectedModifications: DeviceModifications = {
                 manufacturer: 32,
-                product: 2530,
+                product: 3, // ELEMNT BOLT for Wahoo
                 serialNumber: 999999,
             };
 

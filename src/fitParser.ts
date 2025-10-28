@@ -1,5 +1,6 @@
 import { Decoder, Stream } from "@garmin/fitsdk";
 import { getManufacturerName } from "./manufacturerMap";
+import { getProductName } from "./productMap";
 
 interface FitMessage {
     [key: string]: unknown;
@@ -256,10 +257,13 @@ class FitFileParser {
         const productId =
             typeof device.product === "number" ? device.product : undefined;
         const product =
-            typeof device.product === "string" ||
-            typeof device.product === "number"
-                ? String(device.product)
-                : "Unknown";
+            productId && manufacturerId
+                ? getProductName(productId, manufacturerId)
+                : typeof device.product === "string"
+                  ? device.product
+                  : productId
+                    ? String(productId)
+                    : "Unknown";
 
         return {
             manufacturer,
