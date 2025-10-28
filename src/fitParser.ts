@@ -1,4 +1,6 @@
 import { Decoder, Stream } from "@garmin/fitsdk";
+import { getManufacturerName } from "./manufacturerMap";
+import { getProductName } from "./productMap";
 
 interface FitMessage {
     [key: string]: unknown;
@@ -37,8 +39,10 @@ export interface HeartRateData {
 }
 
 export interface DeviceInfo {
-    manufacturer?: string;
+    manufacturer?: string; // Human-readable name
+    manufacturerId?: number; // Numeric ID for encoding
     product?: string;
+    productId?: number; // Numeric ID for encoding
     serialNumber?: number | null;
     softwareVersion?: number | null;
     hardwareVersion?: number | null;
@@ -90,7 +94,7 @@ class FitFileParser {
                 applyScaleAndOffset: true,
                 expandSubFields: true,
                 expandComponents: true,
-                convertTypesToStrings: true,
+                convertTypesToStrings: false, // Keep numeric IDs for encoding
                 convertDateTimesToDates: true,
                 includeUnknownData: false,
                 mergeHeartRates: false,
@@ -238,16 +242,34 @@ class FitFileParser {
         const device = devices[0];
         if (!device) return { message: "No device information found" };
 
+        // Extract manufacturer
+        const manufacturerId =
+            typeof device.manufacturer === "number"
+                ? device.manufacturer
+                : undefined;
+        const manufacturer = manufacturerId
+            ? getManufacturerName(manufacturerId)
+            : typeof device.manufacturer === "string"
+              ? device.manufacturer
+              : "Unknown";
+
+        // Extract product
+        const productId =
+            typeof device.product === "number" ? device.product : undefined;
+        const product =
+            productId && manufacturerId
+                ? getProductName(productId, manufacturerId)
+                : typeof device.product === "string"
+                  ? device.product
+                  : productId
+                    ? String(productId)
+                    : "Unknown";
+
         return {
-            manufacturer:
-                typeof device.manufacturer === "string"
-                    ? device.manufacturer
-                    : "Unknown",
-            product:
-                typeof device.product === "string" ||
-                typeof device.product === "number"
-                    ? String(device.product)
-                    : "Unknown",
+            manufacturer,
+            manufacturerId,
+            product,
+            productId,
             serialNumber:
                 typeof device.serialNumber === "number"
                     ? device.serialNumber

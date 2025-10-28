@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import type { DeviceModifications } from "../fitEncoder";
+import { MANUFACTURERS, getManufacturerName } from "../manufacturerMap";
+import { getProductsForManufacturer, getProductName } from "../productMap";
 
 interface FieldEditorProps {
     currentDevice?: {
-        manufacturer?: string;
-        product?: string;
+        manufacturer?: number;
+        product?: number;
         serialNumber?: number | null;
         softwareVersion?: number | null;
     };
@@ -18,9 +20,11 @@ export default function FieldEditor({
     onCancel,
 }: FieldEditorProps) {
     const [manufacturer, setManufacturer] = useState(
-        currentDevice?.manufacturer || ""
+        currentDevice?.manufacturer?.toString() || ""
     );
-    const [product, setProduct] = useState(currentDevice?.product || "");
+    const [product, setProduct] = useState(
+        currentDevice?.product?.toString() || ""
+    );
     const [serialNumber, setSerialNumber] = useState(
         currentDevice?.serialNumber?.toString() || ""
     );
@@ -28,17 +32,45 @@ export default function FieldEditor({
         currentDevice?.softwareVersion?.toString() || ""
     );
 
+    // Get products for the selected manufacturer
+    const availableProducts = useMemo(() => {
+        if (!manufacturer) return [];
+        return getProductsForManufacturer(parseInt(manufacturer, 10));
+    }, [manufacturer]);
+
+    // When manufacturer changes, clear product if it's not valid for the new manufacturer
+    const handleManufacturerChange = (newManufacturer: string) => {
+        setManufacturer(newManufacturer);
+
+        // If we have a product selected, check if it's valid for this manufacturer
+        if (product && newManufacturer) {
+            const manufacturerId = parseInt(newManufacturer, 10);
+            const productsForMfr = getProductsForManufacturer(manufacturerId);
+            const isProductValid = productsForMfr.some(
+                (p) => p.id.toString() === product
+            );
+
+            // Clear product if it's not valid for the new manufacturer
+            if (!isProductValid) {
+                setProduct("");
+            }
+        }
+    };
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
         const modifications: DeviceModifications = {};
 
         // Only include fields that have been changed
-        if (manufacturer && manufacturer !== currentDevice?.manufacturer) {
-            modifications.manufacturer = manufacturer;
+        if (
+            manufacturer &&
+            manufacturer !== currentDevice?.manufacturer?.toString()
+        ) {
+            modifications.manufacturer = parseInt(manufacturer, 10);
         }
-        if (product && product !== currentDevice?.product) {
-            modifications.product = product;
+        if (product && product !== currentDevice?.product?.toString()) {
+            modifications.product = parseInt(product, 10);
         }
         if (serialNumber) {
             const num = parseInt(serialNumber, 10);
@@ -58,8 +90,8 @@ export default function FieldEditor({
 
     const hasChanges = () => {
         return (
-            manufacturer !== (currentDevice?.manufacturer || "") ||
-            product !== (currentDevice?.product || "") ||
+            manufacturer !== (currentDevice?.manufacturer?.toString() || "") ||
+            product !== (currentDevice?.product?.toString() || "") ||
             serialNumber !== (currentDevice?.serialNumber?.toString() || "") ||
             softwareVersion !==
                 (currentDevice?.softwareVersion?.toString() || "")
@@ -73,32 +105,68 @@ export default function FieldEditor({
                 <div className="form-group">
                     <label htmlFor="manufacturer">
                         Manufacturer:
-                        <input
-                            type="text"
+                        <select
                             id="manufacturer"
                             value={manufacturer}
-                            onChange={(e) => setManufacturer(e.target.value)}
-                            placeholder="e.g., garmin, wahoo, etc."
-                        />
+                            onChange={(e) =>
+                                handleManufacturerChange(e.target.value)
+                            }
+                        >
+                            <option value="">-- Select Manufacturer --</option>
+                            {MANUFACTURERS.map((m) => (
+                                <option key={m.id} value={m.id}>
+                                    {m.name}
+                                </option>
+                            ))}
+                        </select>
                     </label>
                     <small className="form-hint">
-                        Current: {currentDevice?.manufacturer || "N/A"}
+                        Current:{" "}
+                        {currentDevice?.manufacturer
+                            ? getManufacturerName(currentDevice.manufacturer)
+                            : "N/A"}
                     </small>
                 </div>
 
                 <div className="form-group">
                     <label htmlFor="product">
                         Product:
-                        <input
-                            type="text"
-                            id="product"
-                            value={product}
-                            onChange={(e) => setProduct(e.target.value)}
-                            placeholder="e.g., edge1030, fenix7, etc."
-                        />
+                        {manufacturer && availableProducts.length > 0 ? (
+                            <select
+                                id="product"
+                                value={product}
+                                onChange={(e) => setProduct(e.target.value)}
+                            >
+                                <option value="">-- Select Product --</option>
+                                {availableProducts.map((p) => (
+                                    <option key={p.id} value={p.id}>
+                                        {p.name}
+                                    </option>
+                                ))}
+                            </select>
+                        ) : (
+                            <input
+                                type="number"
+                                id="product"
+                                value={product}
+                                onChange={(e) => setProduct(e.target.value)}
+                                placeholder={
+                                    manufacturer
+                                        ? "No products available"
+                                        : "Select manufacturer first"
+                                }
+                                disabled={!manufacturer}
+                            />
+                        )}
                     </label>
                     <small className="form-hint">
-                        Current: {currentDevice?.product || "N/A"}
+                        Current:{" "}
+                        {currentDevice?.product && currentDevice?.manufacturer
+                            ? getProductName(
+                                  currentDevice.product,
+                                  currentDevice.manufacturer
+                              )
+                            : currentDevice?.product || "N/A"}
                     </small>
                 </div>
 

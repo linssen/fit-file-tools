@@ -37,7 +37,7 @@ describe("FitFileEncoder - Regression Tests", () => {
     describe("Bug: Failed to encode deviceInfoMesgs - Could not write Message", () => {
         it("should handle real-world deviceInfo message structure", () => {
             const mockEncoder = {
-                writeMesg: jest.fn(),
+                onMesg: jest.fn(),
                 close: jest.fn(() => new Uint8Array([1, 2, 3, 4])),
             };
 
@@ -106,7 +106,7 @@ describe("FitFileEncoder - Regression Tests", () => {
 
         it("should handle deviceInfo messages with undefined optional fields", () => {
             const mockEncoder = {
-                writeMesg: jest.fn(),
+                onMesg: jest.fn(),
                 close: jest.fn(() => new Uint8Array([1, 2, 3])),
             };
 
@@ -140,7 +140,7 @@ describe("FitFileEncoder - Regression Tests", () => {
 
         it("should preserve Date objects when cloning messages", () => {
             const mockEncoder = {
-                writeMesg: jest.fn(),
+                onMesg: jest.fn(),
                 close: jest.fn(() => new Uint8Array([1, 2, 3])),
             };
 
@@ -160,16 +160,17 @@ describe("FitFileEncoder - Regression Tests", () => {
 
             encoder.encodeWithModifications(rawMessages, {});
 
-            // Verify writeMesg was called with a message that has the Date object
-            expect(mockEncoder.writeMesg).toHaveBeenCalled();
-            const calledMessage = mockEncoder.writeMesg.mock.calls[0][0];
+            // Verify onMesg was called with a message that has the Date object
+            // onMesg(mesgNum, message) - message is the second parameter
+            expect(mockEncoder.onMesg).toHaveBeenCalled();
+            const calledMessage = mockEncoder.onMesg.mock.calls[0][1];
             expect(calledMessage.timestamp).toBeInstanceOf(Date);
             expect(calledMessage.timestamp).toEqual(timestamp);
         });
 
         it("should handle nested objects in messages", () => {
             const mockEncoder = {
-                writeMesg: jest.fn(),
+                onMesg: jest.fn(),
                 close: jest.fn(() => new Uint8Array([1, 2, 3])),
             };
 
@@ -194,7 +195,7 @@ describe("FitFileEncoder - Regression Tests", () => {
 
         it("should handle messages with all data types", () => {
             const mockEncoder = {
-                writeMesg: jest.fn(),
+                onMesg: jest.fn(),
                 close: jest.fn(() => new Uint8Array([1, 2, 3])),
             };
 
@@ -225,8 +226,9 @@ describe("FitFileEncoder - Regression Tests", () => {
             }).not.toThrow();
 
             // Verify message structure is preserved
-            expect(mockEncoder.writeMesg).toHaveBeenCalled();
-            const calledMessage = mockEncoder.writeMesg.mock.calls[0][0];
+            // onMesg(mesgNum, message) - message is the second parameter
+            expect(mockEncoder.onMesg).toHaveBeenCalled();
+            const calledMessage = mockEncoder.onMesg.mock.calls[0][1];
             expect(calledMessage.sport).toBe("cycling");
             expect(calledMessage.totalDistance).toBe(10500);
             expect(calledMessage.timestamp).toBeInstanceOf(Date);
@@ -236,7 +238,7 @@ describe("FitFileEncoder - Regression Tests", () => {
     describe("Bug: Message modification mutating original data", () => {
         it("should not mutate original message when applying modifications", () => {
             const mockEncoder = {
-                writeMesg: jest.fn(),
+                onMesg: jest.fn(),
                 close: jest.fn(() => new Uint8Array([1, 2, 3])),
             };
 

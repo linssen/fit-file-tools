@@ -4,8 +4,8 @@ import { Encoder, Profile } from "@garmin/fitsdk";
  * Interface for device field modifications
  */
 export interface DeviceModifications {
-    manufacturer?: string | number;
-    product?: string | number;
+    manufacturer?: number;
+    product?: number;
     serialNumber?: number;
     softwareVersion?: number;
 }
@@ -107,19 +107,53 @@ export class FitFileEncoder {
             );
         }
 
-        // Write the message using writeMesg with mesgNum property
-        // This is the preferred method for the @garmin/fitsdk Encoder
+        // Clean the message: remove undefined values and non-serializable fields
+        // The FIT encoder can't handle undefined values
+        const cleanedMessage = this.cleanMessageForEncoder(modifiedMessage);
+
+        // Write the message using onMesg
+        // onMesg takes the message number and message separately
         try {
-            encoder.writeMesg({
-                mesgNum,
-                ...modifiedMessage,
-            });
+            encoder.onMesg(mesgNum, cleanedMessage);
         } catch (error) {
             console.error(`Error encoding message type ${mesgType}:`, error);
+            console.error("Message that failed:", cleanedMessage);
             throw new Error(
                 `Failed to encode ${mesgType}: ${error instanceof Error ? error.message : String(error)}`
             );
         }
+    }
+
+    /**
+     * Clean a message for the encoder by removing undefined values
+     * and ensuring all values are serializable
+     */
+    private cleanMessageForEncoder(
+        message: Record<string, unknown>
+    ): Record<string, unknown> {
+        const cleaned: Record<string, unknown> = {};
+
+        for (const [key, value] of Object.entries(message)) {
+            // Skip undefined values - the encoder can't handle them
+            if (value === undefined) {
+                continue;
+            }
+
+            // Skip mesgNum if it exists (will be passed separately to onMesg)
+            if (key === "mesgNum") {
+                continue;
+            }
+
+            // Skip developerFields - they require special registration with encoder.addDeveloperField()
+            // For now, we don't support modifying developer fields
+            if (key === "developerFields") {
+                continue;
+            }
+
+            cleaned[key] = value;
+        }
+
+        return cleaned;
     }
 
     /**
@@ -158,12 +192,16 @@ export class FitFileEncoder {
         message: Record<string, unknown>,
         modifications: DeviceModifications
     ): void {
+        // Apply numeric manufacturer ID
         if (modifications.manufacturer !== undefined) {
             message.manufacturer = modifications.manufacturer;
         }
+
+        // Apply numeric product ID
         if (modifications.product !== undefined) {
             message.product = modifications.product;
         }
+
         if (modifications.serialNumber !== undefined) {
             message.serialNumber = modifications.serialNumber;
         }
@@ -228,6 +266,8 @@ export class FitFileEncoder {
             gpsMetadataMesgs: Profile.MesgNum.GPS_METADATA,
             padMesgs: Profile.MesgNum.PAD,
             memoGlobMesgs: Profile.MesgNum.MEMO_GLOB,
+            developerDataIdMesgs: Profile.MesgNum.DEVELOPER_DATA_ID,
+            fieldDescriptionMesgs: Profile.MesgNum.FIELD_DESCRIPTION,
         };
 
         return mesgTypeMap[mesgType];

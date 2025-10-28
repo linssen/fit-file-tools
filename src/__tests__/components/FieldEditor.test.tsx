@@ -11,8 +11,8 @@ describe("FieldEditor", () => {
     const mockOnCancel = jest.fn();
 
     const defaultDevice = {
-        manufacturer: "garmin",
-        product: "edge1030",
+        manufacturer: 1, // Garmin
+        product: 2713, // Edge 1030
         serialNumber: 123456789,
         softwareVersion: 5.2,
     };
@@ -51,8 +51,9 @@ describe("FieldEditor", () => {
                 />
             );
 
-            expect(screen.getByText(/Current: garmin/)).toBeInTheDocument();
-            expect(screen.getByText(/Current: edge1030/)).toBeInTheDocument();
+            expect(screen.getByText(/Current: Garmin/)).toBeInTheDocument();
+            // Product now shows product name instead of just ID
+            expect(screen.getByText(/Current: Edge 1030/)).toBeInTheDocument();
             expect(screen.getByText(/Current: 123456789/)).toBeInTheDocument();
             expect(screen.getByText(/Current: 5.2/)).toBeInTheDocument();
         });
@@ -66,10 +67,9 @@ describe("FieldEditor", () => {
                 />
             );
 
-            expect(screen.getByLabelText(/Manufacturer:/)).toHaveValue(
-                "garmin"
-            );
-            expect(screen.getByLabelText(/Product:/)).toHaveValue("edge1030");
+            expect(screen.getByLabelText(/Manufacturer:/)).toHaveValue("1");
+            // Product is now a select dropdown when manufacturer is set
+            expect(screen.getByLabelText(/Product:/)).toHaveValue("2713");
             expect(screen.getByLabelText(/Serial Number:/)).toHaveValue(
                 123456789
             );
@@ -97,9 +97,9 @@ describe("FieldEditor", () => {
             );
 
             const input = screen.getByLabelText(/Manufacturer:/);
-            fireEvent.change(input, { target: { value: "wahoo" } });
+            fireEvent.change(input, { target: { value: "32" } }); // Wahoo Fitness
 
-            expect(input).toHaveValue("wahoo");
+            expect(input).toHaveValue("32");
         });
 
         it("should update product field on input", () => {
@@ -112,9 +112,10 @@ describe("FieldEditor", () => {
             );
 
             const input = screen.getByLabelText(/Product:/);
-            fireEvent.change(input, { target: { value: "elemnt" } });
+            // Product is now a select dropdown, so value is a string
+            fireEvent.change(input, { target: { value: "2238" } }); // Venu 2
 
-            expect(input).toHaveValue("elemnt");
+            expect(input).toHaveValue("2238");
         });
 
         it("should update serial number field on input", () => {
@@ -205,7 +206,7 @@ describe("FieldEditor", () => {
 
             // Change only manufacturer
             const manufacturerInput = screen.getByLabelText(/Manufacturer:/);
-            fireEvent.change(manufacturerInput, { target: { value: "wahoo" } });
+            fireEvent.change(manufacturerInput, { target: { value: "32" } }); // Wahoo Fitness
 
             // Submit form
             const form = screen
@@ -218,7 +219,7 @@ describe("FieldEditor", () => {
 
             expect(mockOnModify).toHaveBeenCalledTimes(1);
             expect(mockOnModify).toHaveBeenCalledWith({
-                manufacturer: "wahoo",
+                manufacturer: 32,
             });
         });
 
@@ -233,10 +234,11 @@ describe("FieldEditor", () => {
 
             // Change multiple fields
             fireEvent.change(screen.getByLabelText(/Manufacturer:/), {
-                target: { value: "wahoo" },
+                target: { value: "32" }, // Wahoo Fitness
             });
+            // After manufacturer changes, product field should be available
             fireEvent.change(screen.getByLabelText(/Product:/), {
-                target: { value: "elemnt" },
+                target: { value: "16" }, // ELEMNT BOLT for Wahoo
             });
             fireEvent.change(screen.getByLabelText(/Serial Number:/), {
                 target: { value: "999999" },
@@ -252,8 +254,8 @@ describe("FieldEditor", () => {
             }
 
             const expectedModifications: DeviceModifications = {
-                manufacturer: "wahoo",
-                product: "elemnt",
+                manufacturer: 32,
+                product: 16, // ELEMNT BOLT for Wahoo
                 serialNumber: 999999,
             };
 
@@ -352,8 +354,8 @@ describe("FieldEditor", () => {
             render(
                 <FieldEditor
                     currentDevice={{
-                        manufacturer: "garmin",
-                        product: "edge",
+                        manufacturer: 1, // Garmin
+                        product: 1735, // Edge 820
                         serialNumber: null,
                         softwareVersion: null,
                     }}
