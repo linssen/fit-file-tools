@@ -153,35 +153,6 @@ Test coverage includes:
 
 Current coverage: **90.74%** overall, **85.29%** components
 
-## Project Structure
-
-```
-fitfiles/
-├── src/
-│   ├── index.tsx              # React entry point
-│   ├── App.tsx                # Main application component
-│   ├── fitParser.ts           # FIT file parsing logic
-│   ├── components/
-│   │   ├── FileUpload.tsx     # File upload UI
-│   │   ├── FileInfo.tsx       # File metadata display
-│   │   ├── ActivitySummary.tsx # Activity metrics
-│   │   └── DataPreview.tsx    # GPS/HR data tables
-│   ├── __tests__/
-│   │   ├── App.test.tsx
-│   │   ├── fitParser.test.ts
-│   │   ├── integration.test.ts
-│   │   └── components/        # Component tests
-│   ├── styles.css             # Application styles
-├── index.html                 # HTML entry point (Vite convention)
-├── dist/                      # Production build output
-├── .github/workflows/
-│   └── deploy.yml            # GitHub Pages deployment
-├── vite.config.ts            # Vite configuration
-├── jest.config.js           # Test configuration
-├── tsconfig.json            # TypeScript configuration
-└── package.json             # Dependencies and scripts
-```
-
 ## Technology Stack
 
 - **React 19** - UI framework
