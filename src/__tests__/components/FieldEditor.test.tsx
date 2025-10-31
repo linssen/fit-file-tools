@@ -19,6 +19,8 @@ describe("FieldEditor", () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
+        // Clear localStorage before each test
+        localStorage.clear();
     });
 
     describe("Rendering", () => {
@@ -458,6 +460,146 @@ describe("FieldEditor", () => {
                 "No products available"
             );
             expect(productInput).not.toBeDisabled();
+        });
+    });
+
+    describe("LocalStorage Persistence", () => {
+        it("should save manufacturer selection to localStorage", () => {
+            render(
+                <FieldEditor
+                    currentDevice={defaultDevice}
+                    onModify={mockOnModify}
+                    onCancel={mockOnCancel}
+                />
+            );
+
+            const manufacturerSelect = screen.getByLabelText(/Manufacturer:/);
+            fireEvent.change(manufacturerSelect, { target: { value: "32" } }); // Wahoo
+
+            expect(
+                localStorage.getItem("fitfiles_preferred_manufacturer")
+            ).toBe("32");
+        });
+
+        it("should save product selection to localStorage", () => {
+            render(
+                <FieldEditor
+                    currentDevice={defaultDevice}
+                    onModify={mockOnModify}
+                    onCancel={mockOnCancel}
+                />
+            );
+
+            // First select a manufacturer
+            const manufacturerSelect = screen.getByLabelText(/Manufacturer:/);
+            fireEvent.change(manufacturerSelect, { target: { value: "1" } }); // Garmin
+
+            // Then select a product
+            const productSelect = screen.getByLabelText(/Product:/);
+            fireEvent.change(productSelect, { target: { value: "2238" } }); // Venu 2
+
+            expect(localStorage.getItem("fitfiles_preferred_product")).toBe(
+                "2238"
+            );
+        });
+
+        it("should load manufacturer from localStorage on mount", () => {
+            localStorage.setItem("fitfiles_preferred_manufacturer", "32"); // Wahoo
+
+            render(
+                <FieldEditor
+                    currentDevice={defaultDevice}
+                    onModify={mockOnModify}
+                    onCancel={mockOnCancel}
+                />
+            );
+
+            const manufacturerSelect = screen.getByLabelText(
+                /Manufacturer:/
+            ) as HTMLSelectElement;
+            expect(manufacturerSelect.value).toBe("32");
+        });
+
+        it("should load product from localStorage on mount", () => {
+            localStorage.setItem("fitfiles_preferred_manufacturer", "1"); // Garmin
+            localStorage.setItem("fitfiles_preferred_product", "2238"); // Venu 2
+
+            render(
+                <FieldEditor
+                    currentDevice={defaultDevice}
+                    onModify={mockOnModify}
+                    onCancel={mockOnCancel}
+                />
+            );
+
+            const productSelect = screen.getByLabelText(
+                /Product:/
+            ) as HTMLSelectElement;
+            expect(productSelect.value).toBe("2238");
+        });
+
+        it("should clear product from localStorage when manufacturer changes", () => {
+            localStorage.setItem("fitfiles_preferred_manufacturer", "1"); // Garmin
+            localStorage.setItem("fitfiles_preferred_product", "2238"); // Venu 2
+
+            render(
+                <FieldEditor
+                    currentDevice={defaultDevice}
+                    onModify={mockOnModify}
+                    onCancel={mockOnCancel}
+                />
+            );
+
+            // Change to a different manufacturer
+            const manufacturerSelect = screen.getByLabelText(/Manufacturer:/);
+            fireEvent.change(manufacturerSelect, { target: { value: "32" } }); // Wahoo
+
+            // Product should be cleared from localStorage since it's not valid for Wahoo
+            expect(
+                localStorage.getItem("fitfiles_preferred_product")
+            ).toBeNull();
+        });
+
+        it("should remove manufacturer from localStorage when cleared", () => {
+            localStorage.setItem("fitfiles_preferred_manufacturer", "1");
+
+            render(
+                <FieldEditor
+                    currentDevice={defaultDevice}
+                    onModify={mockOnModify}
+                    onCancel={mockOnCancel}
+                />
+            );
+
+            const manufacturerSelect = screen.getByLabelText(/Manufacturer:/);
+            fireEvent.change(manufacturerSelect, { target: { value: "" } });
+
+            expect(
+                localStorage.getItem("fitfiles_preferred_manufacturer")
+            ).toBeNull();
+        });
+
+        it("should remove product from localStorage when cleared", () => {
+            localStorage.setItem("fitfiles_preferred_product", "2238");
+
+            render(
+                <FieldEditor
+                    currentDevice={defaultDevice}
+                    onModify={mockOnModify}
+                    onCancel={mockOnCancel}
+                />
+            );
+
+            // First select manufacturer to enable product select
+            const manufacturerSelect = screen.getByLabelText(/Manufacturer:/);
+            fireEvent.change(manufacturerSelect, { target: { value: "1" } });
+
+            const productSelect = screen.getByLabelText(/Product:/);
+            fireEvent.change(productSelect, { target: { value: "" } });
+
+            expect(
+                localStorage.getItem("fitfiles_preferred_product")
+            ).toBeNull();
         });
     });
 });

@@ -14,17 +14,23 @@ interface FieldEditorProps {
     onCancel: () => void;
 }
 
+const STORAGE_KEY_MANUFACTURER = "fitfiles_preferred_manufacturer";
+const STORAGE_KEY_PRODUCT = "fitfiles_preferred_product";
+
 export default function FieldEditor({
     currentDevice,
     onModify,
     onCancel,
 }: FieldEditorProps) {
-    const [manufacturer, setManufacturer] = useState(
-        currentDevice?.manufacturer?.toString() || ""
-    );
-    const [product, setProduct] = useState(
-        currentDevice?.product?.toString() || ""
-    );
+    // Load saved preferences from localStorage, or fall back to current device values
+    const [manufacturer, setManufacturer] = useState(() => {
+        const saved = localStorage.getItem(STORAGE_KEY_MANUFACTURER);
+        return saved || currentDevice?.manufacturer?.toString() || "";
+    });
+    const [product, setProduct] = useState(() => {
+        const saved = localStorage.getItem(STORAGE_KEY_PRODUCT);
+        return saved || currentDevice?.product?.toString() || "";
+    });
     const [serialNumber, setSerialNumber] = useState(
         currentDevice?.serialNumber?.toString() || ""
     );
@@ -48,6 +54,13 @@ export default function FieldEditor({
     const handleManufacturerChange = (newManufacturer: string) => {
         setManufacturer(newManufacturer);
 
+        // Save to localStorage
+        if (newManufacturer) {
+            localStorage.setItem(STORAGE_KEY_MANUFACTURER, newManufacturer);
+        } else {
+            localStorage.removeItem(STORAGE_KEY_MANUFACTURER);
+        }
+
         // If we have a product selected, check if it's valid for this manufacturer
         if (product && newManufacturer) {
             const manufacturerId = parseInt(newManufacturer, 10);
@@ -59,7 +72,19 @@ export default function FieldEditor({
             // Clear product if it's not valid for the new manufacturer
             if (!isProductValid) {
                 setProduct("");
+                localStorage.removeItem(STORAGE_KEY_PRODUCT);
             }
+        }
+    };
+
+    const handleProductChange = (newProduct: string) => {
+        setProduct(newProduct);
+
+        // Save to localStorage
+        if (newProduct) {
+            localStorage.setItem(STORAGE_KEY_PRODUCT, newProduct);
+        } else {
+            localStorage.removeItem(STORAGE_KEY_PRODUCT);
         }
     };
 
@@ -141,7 +166,9 @@ export default function FieldEditor({
                             <select
                                 id="product"
                                 value={product}
-                                onChange={(e) => setProduct(e.target.value)}
+                                onChange={(e) =>
+                                    handleProductChange(e.target.value)
+                                }
                             >
                                 <option value="">-- Select Product --</option>
                                 {availableProducts.map((p) => (
@@ -155,7 +182,9 @@ export default function FieldEditor({
                                 type="number"
                                 id="product"
                                 value={product}
-                                onChange={(e) => setProduct(e.target.value)}
+                                onChange={(e) =>
+                                    handleProductChange(e.target.value)
+                                }
                                 placeholder={
                                     manufacturer
                                         ? "No products available"
