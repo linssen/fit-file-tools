@@ -1,17 +1,20 @@
 # FIT File Reader
 
-A standalone React web application for reading and parsing Garmin FIT files directly in the browser.
+A standalone React web application for reading, editing, and exporting Garmin FIT files directly in the browser.
 
 ## Features
 
 - 🏃 **Client-side Processing**: All FIT file parsing happens in your browser - no data leaves your device
 - ⚛️ **React 19**: Modern component-based architecture with hooks
 - 📁 **Drag & Drop**: Intuitive file upload interface with drag-and-drop support
-- � **Data Visualization**: View GPS tracks, heart rate, power, and more
-- �🔍 **File Analysis**: Parse and display comprehensive FIT file data
-- 🧪 **90%+ Test Coverage**: Comprehensive test suite with React Testing Library
+- 🗺️ **GPS Visualization**: Interactive maps showing your activity routes with Leaflet
+- 📊 **Data Analysis**: View heart rate, power, speed, distance, and elevation data
+- ✏️ **Device Info Editing**: Modify device manufacturer, product, serial number, and software version
+- 💾 **Export Modified Files**: Download edited FIT files with your changes
+- 🧪 **90%+ Test Coverage**: Comprehensive test suite with React Testing Library and Jest
 - 📱 **Responsive**: Works on desktop and mobile browsers
 - 🎨 **Modern UI**: Clean, user-friendly interface
+- 🔒 **Privacy First**: All processing happens locally - your fitness data stays on your device
 
 ## Getting Started
 
@@ -53,6 +56,36 @@ A standalone React web application for reading and parsing Garmin FIT files dire
    ```bash
    yarn build
    ```
+
+## Usage
+
+### Parsing FIT Files
+
+1. Open the application in your browser
+2. Drag and drop a `.fit` file onto the upload area, or click to browse
+3. View the parsed data including:
+   - File metadata (sport type, duration, distance)
+   - GPS track visualization on an interactive map
+   - Activity summary (speed, heart rate, calories, etc.)
+   - Detailed GPS points and heart rate readings
+
+### Editing Device Information
+
+After parsing a FIT file, you can modify the device information:
+
+1. Click the "Modify Device Info & Download" button
+2. Edit any of the following fields:
+   - **Manufacturer**: Device brand (e.g., Garmin, Wahoo, Polar)
+   - **Product**: Specific device model (e.g., Edge 530, Fenix 7)
+   - **Serial Number**: Device serial number
+   - **Software Version**: Firmware version
+3. Click "Apply Changes & Download" to export the modified FIT file
+4. The edited file will be downloaded with `_modified` appended to the filename
+
+**Use Cases:**
+- Change device info to match a different device for platform compatibility
+- Update device information for tracking purposes
+- Correct incorrect device metadata
 
 ## Development Workflow
 

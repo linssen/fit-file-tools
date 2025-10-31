@@ -2,20 +2,21 @@
 
 ## Project Overview
 
-This is a standalone HTML/JavaScript web application for reading and parsing Garmin FIT files (a proprietary binary format used by Garmin devices for fitness data).
+This is a standalone HTML/JavaScript web application for reading, editing, and exporting Garmin FIT files (a proprietary binary format used by Garmin devices for fitness data).
 
 ## Architecture & Goals
 
 -   **Target:** Single-page web application that runs entirely in the browser
--   **Core Functionality:** Parse FIT files uploaded by users and display fitness data
+-   **Core Functionality:** Parse FIT files, display fitness data, edit device information, and export modified files
 -   **No Backend:** All processing happens client-side for privacy and simplicity
 -   **File Format:** FIT files contain binary-encoded fitness data (GPS tracks, heart rate, power, etc.)
 
 ## Technical Stack
 
 -   **Frontend:** Modern TypeScript with Vite bundling
--   **FIT Parsing:** `@garmin/fitsdk` - Official Garmin FIT SDK (supports both reading and writing)
--   **File Handling:** HTML5 File API for local file uploads
+-   **FIT Parsing & Encoding:** `@garmin/fitsdk` - Official Garmin FIT SDK (supports both reading and writing)
+-   **Map Visualization:** Leaflet - Interactive GPS track maps
+-   **File Handling:** HTML5 File API for local file uploads and downloads
 -   **Testing:** Jest with jsdom environment (uses Babel for test transpilation)
 -   **Build System:** Vite with esbuild for fast builds and HMR
 -   **Package Manager:** Yarn
@@ -24,10 +25,11 @@ This is a standalone HTML/JavaScript web application for reading and parsing Gar
 ## Key Considerations
 
 -   **Binary Parsing:** Uses official `@garmin/fitsdk` library with Decoder for robust FIT protocol support
--   **File Modification:** Encoder class available for modifying and exporting FIT files
+-   **File Modification:** Encoder class (FitFileEncoder) for modifying device info and exporting FIT files
+-   **GPS Visualization:** Leaflet maps with OpenStreetMap tiles for route visualization
 -   **File Size:** FIT files can be large (GPS tracks) - library handles streaming efficiently
 -   **Browser Compatibility:** ES6+ with modern browser targets (Vite handles transpilation)
--   **Privacy:** All data stays local - no server uploads
+-   **Privacy:** All data stays local - no server uploads or external processing
 
 ## Development Patterns
 
@@ -35,9 +37,16 @@ This is a standalone HTML/JavaScript web application for reading and parsing Gar
 -   **Event-driven UI**: Drag-and-drop file upload with visual feedback
 -   **Error Handling**: Try-catch blocks with user-friendly error messages
 -   **ES6 Modules**: Import/export syntax with Vite bundling
+## Development Patterns
+
+-   **Class-based Architecture**: `FitFileApp` handles UI, `FitFileParser` wraps @garmin/fitsdk Decoder, `FitFileEncoder` wraps @garmin/fitsdk Encoder
+-   **Event-driven UI**: Drag-and-drop file upload with visual feedback
+-   **Error Handling**: Try-catch blocks with user-friendly error messages
+-   **ES6 Modules**: Import/export syntax with Vite bundling
 -   **Library Integration**: Wraps `@garmin/fitsdk` for consistent API and error handling
 -   **Code Quality**: ESLint for linting, Prettier for formatting
 -   **Type Safety**: Strict TypeScript with comprehensive type annotations
+-   **Component Architecture**: React components for FileUpload, FieldEditor, MapView, DataPreview, ActivitySummary
 
 ## Development Workflow
 
