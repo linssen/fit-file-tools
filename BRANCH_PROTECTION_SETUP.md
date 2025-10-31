@@ -107,7 +107,7 @@ The `pr-checks.yml` workflow automatically runs:
    - Coverage reports uploaded (optional Codecov integration)
 
 4. **Build Job** (`yarn build`)
-   - Production webpack build
+   - Production Vite build
    - Verification that build artifacts are created
 
 All four jobs must pass ✅ before the PR can be merged.

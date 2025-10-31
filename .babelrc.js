@@ -1,20 +1,7 @@
 module.exports = {
     presets: [
-        [
-            "@babel/preset-env",
-            {
-                targets: {
-                    browsers: ["> 1%", "last 2 versions"],
-                    node: "current",
-                },
-            },
-        ],
+        ["@babel/preset-env", { targets: { node: "current" } }],
+        ["@babel/preset-react", { runtime: "automatic" }],
         "@babel/preset-typescript",
-        [
-            "@babel/preset-react",
-            {
-                runtime: "automatic",
-            },
-        ],
     ],
 };

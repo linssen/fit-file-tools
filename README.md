@@ -112,7 +112,7 @@ Every PR automatically runs:
 -   **Lint**: ESLint checks for code quality issues
 -   **Format**: Prettier verifies consistent code formatting
 -   **Test**: Jest runs full test suite with coverage reporting
--   **Build**: Webpack creates production bundle to ensure no build errors
+-   **Build**: Vite creates production bundle to ensure no build errors
 
 ### GitHub Pages Deployment
 
@@ -172,11 +172,11 @@ fitfiles/
 │   │   ├── integration.test.ts
 │   │   └── components/        # Component tests
 │   ├── styles.css             # Application styles
-│   └── index.html             # HTML template
+├── index.html                 # HTML entry point (Vite convention)
 ├── dist/                      # Production build output
 ├── .github/workflows/
 │   └── deploy.yml            # GitHub Pages deployment
-├── webpack.config.js         # Build configuration
+├── vite.config.ts            # Vite configuration
 ├── jest.config.js           # Test configuration
 ├── tsconfig.json            # TypeScript configuration
 └── package.json             # Dependencies and scripts
@@ -186,7 +186,7 @@ fitfiles/
 
 - **React 19** - UI framework
 - **TypeScript** - Type safety
-- **Webpack 5** - Module bundling
+- **Vite** - Fast build tool with instant HMR
 - **Jest** - Testing framework
 - **React Testing Library** - Component testing
 - **@garmin/fitsdk** - Official Garmin FIT SDK (read/write support)
