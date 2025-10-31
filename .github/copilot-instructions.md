@@ -13,11 +13,11 @@ This is a standalone HTML/JavaScript web application for reading and parsing Gar
 
 ## Technical Stack
 
--   **Frontend:** Modern TypeScript with Webpack bundling
+-   **Frontend:** Modern TypeScript with Vite bundling
 -   **FIT Parsing:** `@garmin/fitsdk` - Official Garmin FIT SDK (supports both reading and writing)
 -   **File Handling:** HTML5 File API for local file uploads
--   **Testing:** Jest with jsdom environment
--   **Build System:** Webpack with Babel transpilation (TypeScript support)
+-   **Testing:** Jest with jsdom environment (uses Babel for test transpilation)
+-   **Build System:** Vite with esbuild for fast builds and HMR
 -   **Package Manager:** Yarn
 -   **Type Safety:** Strict TypeScript configuration
 
@@ -26,51 +26,25 @@ This is a standalone HTML/JavaScript web application for reading and parsing Gar
 -   **Binary Parsing:** Uses official `@garmin/fitsdk` library with Decoder for robust FIT protocol support
 -   **File Modification:** Encoder class available for modifying and exporting FIT files
 -   **File Size:** FIT files can be large (GPS tracks) - library handles streaming efficiently
--   **Browser Compatibility:** ES6+ with Babel transpilation for broader support
+-   **Browser Compatibility:** ES6+ with modern browser targets (Vite handles transpilation)
 -   **Privacy:** All data stays local - no server uploads
-
-## Project Structure
-
-```
-fitfiles/
-├── src/
-│   ├── index.html          # HTML template for webpack
-│   ├── index.ts            # Main entry point (TypeScript)
-│   ├── styles.css          # Application styles
-│   ├── app.ts              # Main application logic (FitFileApp class)
-│   ├── fitParser.ts        # FIT file parsing wrapper (FitFileParser class)
-│   ├── garmin-fitsdk.d.ts  # Type declarations for @garmin/fitsdk
-│   └── __tests__/
-│       ├── setup.ts        # Jest test setup and mocks
-│       ├── app.test.ts     # FitFileApp tests
-│       └── fitParser.test.ts # FitFileParser tests
-├── scripts/                # Utility scripts
-│   └── generateTestFit.js  # Generate synthetic test FIT files
-├── dist/                   # Built files (auto-generated)
-├── package.json            # Dependencies and scripts
-├── webpack.config.js       # Webpack configuration
-├── jest.config.js          # Jest test configuration
-├── .babelrc.js            # Babel transpilation config
-├── tsconfig.json          # TypeScript configuration
-├── .gitignore             # Git ignore patterns
-└── README.md              # Project documentation
-```
 
 ## Development Patterns
 
 -   **Class-based Architecture**: `FitFileApp` handles UI, `FitFileParser` wraps @garmin/fitsdk library
 -   **Event-driven UI**: Drag-and-drop file upload with visual feedback
 -   **Error Handling**: Try-catch blocks with user-friendly error messages
--   **ES6 Modules**: Import/export syntax with Webpack bundling
+-   **ES6 Modules**: Import/export syntax with Vite bundling
 -   **Library Integration**: Wraps `@garmin/fitsdk` for consistent API and error handling
 -   **Code Quality**: ESLint for linting, Prettier for formatting
 -   **Type Safety**: Strict TypeScript with comprehensive type annotations
 
 ## Development Workflow
 
--   **Development**: `yarn dev` - starts webpack-dev-server with hot reload
+-   **Development**: `yarn dev` - starts Vite dev server with instant HMR
 -   **Testing**: `yarn test` - runs Jest test suite
--   **Building**: `yarn build` - creates production bundle in `dist/`
+-   **Building**: `yarn build` - creates production bundle in `dist/` (TypeScript check + Vite build)
+-   **Preview**: `yarn preview` - previews production build locally
 -   **Test Coverage**: `yarn test:coverage` - generates coverage reports
 -   **Linting**: `yarn lint` - checks code with ESLint
 -   **Auto-fix**: `yarn lint:fix` - automatically fixes linting issues

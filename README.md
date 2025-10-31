@@ -112,7 +112,7 @@ Every PR automatically runs:
 -   **Lint**: ESLint checks for code quality issues
 -   **Format**: Prettier verifies consistent code formatting
 -   **Test**: Jest runs full test suite with coverage reporting
--   **Build**: Webpack creates production bundle to ensure no build errors
+-   **Build**: Vite creates production bundle to ensure no build errors
 
 ### GitHub Pages Deployment
 
@@ -153,40 +153,11 @@ Test coverage includes:
 
 Current coverage: **90.74%** overall, **85.29%** components
 
-## Project Structure
-
-```
-fitfiles/
-├── src/
-│   ├── index.tsx              # React entry point
-│   ├── App.tsx                # Main application component
-│   ├── fitParser.ts           # FIT file parsing logic
-│   ├── components/
-│   │   ├── FileUpload.tsx     # File upload UI
-│   │   ├── FileInfo.tsx       # File metadata display
-│   │   ├── ActivitySummary.tsx # Activity metrics
-│   │   └── DataPreview.tsx    # GPS/HR data tables
-│   ├── __tests__/
-│   │   ├── App.test.tsx
-│   │   ├── fitParser.test.ts
-│   │   ├── integration.test.ts
-│   │   └── components/        # Component tests
-│   ├── styles.css             # Application styles
-│   └── index.html             # HTML template
-├── dist/                      # Production build output
-├── .github/workflows/
-│   └── deploy.yml            # GitHub Pages deployment
-├── webpack.config.js         # Build configuration
-├── jest.config.js           # Test configuration
-├── tsconfig.json            # TypeScript configuration
-└── package.json             # Dependencies and scripts
-```
-
 ## Technology Stack
 
 - **React 19** - UI framework
 - **TypeScript** - Type safety
-- **Webpack 5** - Module bundling
+- **Vite** - Fast build tool with instant HMR
 - **Jest** - Testing framework
 - **React Testing Library** - Component testing
 - **@garmin/fitsdk** - Official Garmin FIT SDK (read/write support)
