@@ -32,11 +32,17 @@ export default function FieldEditor({
         currentDevice?.softwareVersion?.toString() || ""
     );
 
-    // Get products for the selected manufacturer
+    // Get products for the selected manufacturer, sorted alphabetically
     const availableProducts = useMemo(() => {
         if (!manufacturer) return [];
-        return getProductsForManufacturer(parseInt(manufacturer, 10));
+        const products = getProductsForManufacturer(parseInt(manufacturer, 10));
+        return products.sort((a, b) => a.name.localeCompare(b.name));
     }, [manufacturer]);
+
+    // Get sorted manufacturers for the dropdown
+    const sortedManufacturers = useMemo(() => {
+        return [...MANUFACTURERS].sort((a, b) => a.name.localeCompare(b.name));
+    }, []);
 
     // When manufacturer changes, clear product if it's not valid for the new manufacturer
     const handleManufacturerChange = (newManufacturer: string) => {
@@ -113,7 +119,7 @@ export default function FieldEditor({
                             }
                         >
                             <option value="">-- Select Manufacturer --</option>
-                            {MANUFACTURERS.map((m) => (
+                            {sortedManufacturers.map((m) => (
                                 <option key={m.id} value={m.id}>
                                     {m.name}
                                 </option>
