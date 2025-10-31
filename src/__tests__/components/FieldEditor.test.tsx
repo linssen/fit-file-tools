@@ -388,5 +388,76 @@ describe("FieldEditor", () => {
             expect(cancelButton).toHaveClass("button-secondary");
             expect(submitButton).toHaveClass("button-primary");
         });
+
+        it("should sort manufacturers alphabetically in dropdown", () => {
+            render(
+                <FieldEditor
+                    currentDevice={defaultDevice}
+                    onModify={mockOnModify}
+                    onCancel={mockOnCancel}
+                />
+            );
+
+            const manufacturerSelect = screen.getByLabelText(
+                /Manufacturer:/
+            ) as HTMLSelectElement;
+            const options = Array.from(manufacturerSelect.options).slice(1); // Skip the "-- Select --" option
+
+            // Check that options are sorted alphabetically
+            const optionTexts = options.map((opt) => opt.text);
+            const sortedTexts = [...optionTexts].sort((a, b) =>
+                a.localeCompare(b)
+            );
+
+            expect(optionTexts).toEqual(sortedTexts);
+        });
+
+        it("should sort products alphabetically within manufacturer", () => {
+            render(
+                <FieldEditor
+                    currentDevice={defaultDevice}
+                    onModify={mockOnModify}
+                    onCancel={mockOnCancel}
+                />
+            );
+
+            // Manufacturer 1 (Garmin) is already selected, products should be sorted
+            const productSelect = screen.getByLabelText(
+                /Product:/
+            ) as HTMLSelectElement;
+            const options = Array.from(productSelect.options).slice(1); // Skip the "-- Select --" option
+
+            // Check that product options are sorted alphabetically
+            const productTexts = options.map((opt) => opt.text);
+            const sortedProducts = [...productTexts].sort((a, b) =>
+                a.localeCompare(b)
+            );
+
+            expect(productTexts).toEqual(sortedProducts);
+        });
+
+        it("should show placeholder when manufacturer has no products", () => {
+            render(
+                <FieldEditor
+                    currentDevice={{
+                        manufacturer: 5, // Polar - has no products in our map
+                        product: undefined,
+                        serialNumber: 123456,
+                        softwareVersion: 1.0,
+                    }}
+                    onModify={mockOnModify}
+                    onCancel={mockOnCancel}
+                />
+            );
+
+            // Should show enabled input with "No products available" placeholder
+            const productInput = screen.getByLabelText(/Product:/);
+            expect(productInput).toHaveAttribute("type", "number");
+            expect(productInput).toHaveAttribute(
+                "placeholder",
+                "No products available"
+            );
+            expect(productInput).not.toBeDisabled();
+        });
     });
 });
