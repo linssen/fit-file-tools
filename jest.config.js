@@ -16,6 +16,14 @@ module.exports = {
     ],
     coverageDirectory: "coverage",
     coverageReporters: ["text", "lcov", "html"],
+    coverageThreshold: {
+        global: {
+            branches: 90,
+            functions: 90,
+            lines: 90,
+            statements: 90,
+        },
+    },
     transform: {
         "^.+\\.(ts|tsx|js|jsx)$": "babel-jest",
     },

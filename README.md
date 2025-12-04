@@ -98,9 +98,11 @@ This project uses a Pull Request workflow with automated quality checks.
     - Click "Compare & pull request"
     - Fill in the PR description
     - Wait for automated checks to pass:
+        - ✅ TypeScript compilation (tsc)
         - ✅ Linting (ESLint)
         - ✅ Formatting (Prettier)
-        - ✅ Tests (Jest with coverage)
+        - ✅ Dependency security audit
+        - ✅ Tests (Jest with 90% coverage requirement)
         - ✅ Build verification
     - Request review if needed
     - Merge when all checks pass
@@ -109,9 +111,11 @@ This project uses a Pull Request workflow with automated quality checks.
 
 Every PR automatically runs:
 
+-   **TypeScript**: Compilation check with strict mode
 -   **Lint**: ESLint checks for code quality issues
 -   **Format**: Prettier verifies consistent code formatting
--   **Test**: Jest runs full test suite with coverage reporting
+-   **Audit**: Yarn audit for dependency vulnerabilities
+-   **Test**: Jest runs full test suite with 90% coverage threshold
 -   **Build**: Vite creates production bundle to ensure no build errors
 
 ### GitHub Pages Deployment
@@ -151,7 +155,7 @@ Test coverage includes:
 - Error handling
 - Loading states
 
-Current coverage: **90.74%** overall, **85.29%** components
+Current coverage: **88.01%** overall (working toward 90% threshold), **94.07%** components
 
 ## Technology Stack
 
